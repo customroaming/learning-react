@@ -6,8 +6,8 @@
   margin-bottom: 16px;
 }
 .filter-button {
-  font-size: 1em;
-  padding: 12px 42px;
+  font-size: 0.9em;
+  padding: 8px 32px;
   border-radius: 90px;
   cursor: pointer;
   transition: all 200ms ease-in-out;
@@ -30,4 +30,7 @@ body {
   padding: 16px;
   margin: 0;
   font-family: "Inter", "Noto Sans";
+}
+html{
+    font-size:16px;
 }

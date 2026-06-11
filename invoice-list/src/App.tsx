@@ -133,7 +133,11 @@ export default function App() {
             <form>
                 <input placeholder="name" value={newName} onChange={(e) => setNewName(e.target.value)} />
                 <input placeholder="email" value={newEmail} onChange={(e) => setNewEmail(e.target.value)} />
-                <input placeholder="status" value={newStatus} onChange={(e) => setNewStatus(e.target.value)} />
+                <select value={newStatus} onChange={(e) => setNewStatus(e.target.value as "paid" | "unpaid" | "overdue")}>
+                    <option value="paid">paid</option>
+                    <option value="unpaid">unpaid</option>
+                    <option value="overdue">overdue</option>
+                </select>
                 <input placeholder="amount" value={newAmount} onChange={(e) => setNewAmount(Number(e.target.value))} />
                 <button className="filter-button" onClick={(e) => {
                     e.preventDefault()
