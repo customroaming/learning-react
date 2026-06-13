@@ -1,1 +1,16 @@
 @import "tailwindcss";
+
+@theme {
+  --color-background: #fff8f7;
+  --color-darkText: #3d2f31;
+  --color-primary: #faacb8;
+  --color-secondary: #ffd9de;
+  --color-onSecondary: #684a4e;
+}
+body {
+  color: var(--color-darkText);
+}
+
+.heading {
+  font-family: "Neuton", serif;
+}
