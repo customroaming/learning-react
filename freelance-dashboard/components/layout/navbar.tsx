@@ -15,7 +15,7 @@ export default function Navbar() {
     return (
       <Link href={url}>
         <button
-          className={`text-xl transition-all cursor-pointer py-1 px-4 hover:bg-secondary hover:text-onSecondary active:bg-primary rounded-md ${onPage ? " bg-secondary text-onSecondary" : "font-regular"}`}
+          className={`text-xl transition-all text-onSecondary cursor-pointer leading-4 py-3 px-6 hover:bg-secondary hover:text-onSecondary active:bg-primary rounded-full ${onPage ? " bg-secondary" : ""}`}
         >
           {pageName}
         </button>
