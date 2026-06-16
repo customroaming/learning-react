@@ -6,9 +6,17 @@
   --color-primary: #faacb8;
   --color-secondary: #ffd9de;
   --color-onSecondary: #684a4e;
+  --color-tertiary: #765377;
+  --color-onTertiary: #fff7fa;
+  --color-tertiaryContainer: #f8ccf6;
+  --color-onTertiaryContainer: #624163;
 }
 body {
   color: var(--color-darkText);
+}
+::selection {
+  background-color: var(--color-tertiary);
+  color: var(--color-onTertiary);
 }
 
 .heading {
