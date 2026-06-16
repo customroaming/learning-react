@@ -1,12 +1,5 @@
-import { formatCurrency, formatDate } from "@/lib/utils";
+import { redirect } from "next/navigation";
 
-export default function App() {
-  const amount = formatCurrency(23.2);
-  const date = formatDate(new Date());
-  return (
-    <>
-      <p>{date} </p>
-      <p>{amount} </p>
-    </>
-  );
+export default function HomePage() {
+  redirect("/dashboard");
 }

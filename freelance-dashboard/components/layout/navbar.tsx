@@ -25,9 +25,11 @@ export default function Navbar() {
 
   return (
     <div className="w-full items-center heading py-4 flex flex-row justify-between">
-      <span className=" text-2xl lg:text-4xl text-darkText">
-        Invoice Tracker
-      </span>
+      <Link href="/dashboard">
+        <span className=" text-2xl lg:text-4xl text-darkText">
+          Invoice Tracker
+        </span>
+      </Link>
       <span className="hidden md:flex flex-row gap-8">
         {menuLink("/", "dashboard")}
         {menuLink("/invoices", "invoices")}

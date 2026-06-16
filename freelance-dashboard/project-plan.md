@@ -373,7 +373,7 @@ with seed data in them.
 
 **Goal:** Real invoices from the database, create/edit/delete working.
 
-- [ ] Create `lib/utils.ts` with formatCurrency and formatDate helpers
+- [x] Create `lib/utils.ts` with formatCurrency and formatDate helpers
 - [ ] Build `app/invoices/page.tsx` as a server component that queries DB
 - [ ] Build `components/invoices/InvoiceTable.tsx` as a client component
 - [ ] Build `components/invoices/InvoiceRow.tsx`
