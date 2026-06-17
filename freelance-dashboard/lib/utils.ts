@@ -8,3 +8,7 @@ export function formatCurrency(amount: number): string {
 export function formatDate(date: Date): string {
   return date.toLocaleDateString("en-GB");
 }
+
+export function getCurrentDate() {
+  return;
+}

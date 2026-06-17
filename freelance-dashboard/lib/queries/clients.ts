@@ -1,7 +1,7 @@
 "use server";
 import { clients, invoices } from "@/db/schema";
 import { db } from "@/lib/db";
-import { NewClient, NewInvoice } from "@/types";
+import { Client, NewClient, NewInvoice } from "@/types";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -10,13 +10,16 @@ export async function createInvoice(invoice: NewInvoice) {
   revalidatePath("/invoices");
   redirect("/invoices");
 }
-
 export async function createClient(client: NewClient): Promise<number> {
   const result = db
     .insert(clients)
     .values(client)
     .returning({ id: clients.id })
     .get();
-
+  revalidatePath("/clients");
   return result.id;
+}
+
+export async function getAllClients() {
+  return db.select().from(clients).all();
 }

@@ -3,7 +3,10 @@
 @theme {
   --color-background: #fff8f7;
   --color-darkText: #3d2f31;
+  --color-realPrimary: #8a4d58;
+  --color-onRealPrimary: #fff7f7;
   --color-primary: #faacb8;
+  --color-onPrimary: #612b36;
   --color-secondary: #ffd9de;
   --color-onSecondary: #684a4e;
   --color-tertiary: #765377;
