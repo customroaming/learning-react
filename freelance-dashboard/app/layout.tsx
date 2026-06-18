@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/navbar";
 import { neuton } from "@/src/fonts";
+import BottomBar from "@/components/layout/BottomBar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,6 +33,7 @@ export default function RootLayout({
       <body className="min-h-full max-w-7xl mx-auto px-4 flex flex-col bg-background">
         <Navbar />
         {children}
+        <BottomBar />
       </body>
     </html>
   );
