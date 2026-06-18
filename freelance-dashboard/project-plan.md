@@ -378,15 +378,15 @@ with seed data in them.
 - [x] Build `components/invoices/InvoiceTable.tsx` as a client component
 - [ ] Build `components/invoices/InvoiceRow.tsx`
 - [ ] Build `components/ui/Badge.tsx` for status display (paid/unpaid etc.)
-- [ ] Create `app/invoices/actions.ts` with Server Actions:
+- [x] Create `app/invoices/actions.ts` with Server Actions:
   - createInvoice
   - updateInvoice
   - deleteInvoice
   - updateInvoiceStatus
-- [ ] Build `app/invoices/new/page.tsx` with InvoiceForm
-- [ ] Build `app/invoices/[id]/page.tsx` for detail/edit view
-- [ ] Add revalidatePath("/invoices") to all mutations
-- [ ] Test full create → view → edit → delete flow
+- [x] Build `app/invoices/new/page.tsx` with InvoiceForm
+- [x] Build `app/invoices/[id]/page.tsx` for detail/edit view
+- [x] Add revalidatePath("/invoices") to all mutations
+- [x] Test full create → view → edit → delete flow
 
 **You're done with Phase 3 when:** You can create a real invoice, see it in
 the list, change its status, and delete it — all persisting to SQLite.

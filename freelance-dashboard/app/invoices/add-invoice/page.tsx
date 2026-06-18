@@ -1,6 +1,7 @@
 import InvoiceForm from "./InvoiceForm";
-import { createClient, createInvoice } from "../actions";
+import { createInvoice } from "../actions";
 import { getAllClients } from "@/lib/queries/clients";
+import { createClient } from "@/app/clients/actions";
 
 export default async function InvoicePage() {
   const allClients = await getAllClients();

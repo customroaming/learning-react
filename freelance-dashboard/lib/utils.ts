@@ -12,3 +12,5 @@ export function formatDate(date: Date): string {
 export function getCurrentDate() {
   return;
 }
+
+export const invoiceStatuses = ["draft", "paid", "overdue", "sent"];

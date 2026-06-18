@@ -1,14 +1,24 @@
+"use client";
 import getAllInvoices from "@/lib/queries/invoices";
+import SecondaryButton from "../ui/SecondaryButton";
+import ErrorButton from "../ui/ErrorButton";
+import { useState } from "react";
+import Link from "next/link";
 
 interface InvoiceTableProps {
   allInvoices: ReturnType<typeof getAllInvoices>;
+  deleteInvoiceMethod: (invoiceId: number) => void;
 }
-export default function InvoiceTable({ allInvoices }: InvoiceTableProps) {
+export default function InvoiceTable({
+  allInvoices,
+  deleteInvoiceMethod,
+}: InvoiceTableProps) {
+  const [isDeleting, setIsDeleting] = useState(false);
   return allInvoices.map((invoice) => {
     return (
       <div
         key={invoice.invoices.id}
-        className="invoice col-span-6 p-8 flex bg-tertiaryContainer  heading flex-col rounded-2xl w-full text-onTertiaryContainer"
+        className="invoice col-span-6 p-8 flex bg-tertiaryContainer  heading flex-col gap-4 rounded-2xl w-full text-onTertiaryContainer border border-outline/20"
       >
         <table>
           <tbody>
@@ -48,6 +58,24 @@ export default function InvoiceTable({ allInvoices }: InvoiceTableProps) {
             </tr>
           </tbody>
         </table>
+
+        <div className="flex flex-row gap-4">
+          <Link href={`/invoices/${invoice.invoices.id}`}>
+            <SecondaryButton ctaText="view invoice" />
+          </Link>
+          <ErrorButton
+            ctaText="delete invoice"
+            onClick={async (e) => {
+              setIsDeleting(true);
+              try {
+                deleteInvoiceMethod(invoice.invoices.id);
+              } finally {
+                setIsDeleting(false);
+              }
+            }}
+            isDisabled={isDeleting}
+          />
+        </div>
       </div>
     );
   });

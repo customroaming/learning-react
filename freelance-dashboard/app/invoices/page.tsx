@@ -2,6 +2,7 @@ import InvoiceTable from "@/components/invoices/InvoiceTable";
 import PrimaryButton from "@/components/ui/PrimaryButton";
 import getAllInvoices from "@/lib/queries/invoices";
 import Link from "next/link";
+import { deleteInvoice } from "./actions";
 export default async function Invoices() {
   const allInvoices = getAllInvoices();
   return (
@@ -12,7 +13,10 @@ export default async function Invoices() {
           {PrimaryButton({ ctaText: "add invoice" })}
         </Link>
       </div>
-      <InvoiceTable allInvoices={allInvoices} />
+      <InvoiceTable
+        allInvoices={allInvoices}
+        deleteInvoiceMethod={deleteInvoice}
+      />
     </div>
   );
 }

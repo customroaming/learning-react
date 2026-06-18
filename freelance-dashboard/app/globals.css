@@ -7,12 +7,17 @@
   --color-onRealPrimary: #fff7f7;
   --color-primary: #faacb8;
   --color-onPrimary: #612b36;
+  --color-realSecondary: #76575b;
+  --color-onRealSecondary: #fff7f7;
   --color-secondary: #ffd9de;
   --color-onSecondary: #684a4e;
   --color-tertiary: #765377;
   --color-onTertiary: #fff7fa;
   --color-tertiaryContainer: #f8ccf6;
   --color-onTertiaryContainer: #624163;
+  --color-outline: #897678;
+  --color-error: #a83836;
+  --color-onError: #fff7f6;
 }
 body {
   color: var(--color-darkText);
