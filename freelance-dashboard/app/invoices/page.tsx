@@ -6,8 +6,8 @@ import { deleteInvoice } from "./actions";
 export default async function Invoices() {
   const allInvoices = getAllInvoices();
   return (
-    <div className="grid grid-cols-12 gap-4 items-center">
-      <div className="col-span-6 flex flex-col gap-4">
+    <div className="flex flex-row flex-wrap gap-4 items-center">
+      <div className="flex flex-col gap-4">
         <h1 className="text-5xl text-center">All Invoices</h1>
         <Link className="w-fit mx-auto" href="/invoices/add-invoice">
           {PrimaryButton({ ctaText: "add invoice" })}

@@ -1,5 +1,11 @@
 "use client";
-import { House, LucideIcon } from "lucide-react";
+import {
+  FileText,
+  House,
+  LucideIcon,
+  PoundSterling,
+  UsersRound,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -21,11 +27,11 @@ export default function BottomBar() {
     );
   }
   return (
-    <nav className="flex flex-row justify-around fixed bottom-0 left-0 w-full">
+    <nav className="md:hidden flex flex-row bg-surfaceContainer pt-4 justify-around fixed bottom-0 left-0 w-full">
       {displayIcon("dashboard", "/dashboard", House)}
-      {displayIcon("invoices", "/invoices", House)}
-      {displayIcon("clients", "/clients", House)}
-      {displayIcon("expenses", "/expenses", House)}
+      {displayIcon("invoices", "/invoices", FileText)}
+      {displayIcon("clients", "/clients", UsersRound)}
+      {displayIcon("expenses", "/expenses", PoundSterling)}
     </nav>
   );
 }

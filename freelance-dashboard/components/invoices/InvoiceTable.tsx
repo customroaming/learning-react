@@ -18,7 +18,7 @@ export default function InvoiceTable({
     return (
       <div
         key={invoice.invoices.id}
-        className="invoice col-span-6 p-8 flex bg-tertiaryContainer  heading flex-col gap-4 rounded-2xl w-full text-onTertiaryContainer border border-outline/20"
+        className="invoice p-8 flex bg-tertiaryContainer  heading flex-col gap-4 rounded-2xl w-full text-onTertiaryContainer border border-outline/20"
       >
         <table>
           <tbody>

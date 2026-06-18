@@ -9,6 +9,7 @@ import Link from "next/link";
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const globalPageName = pathname.slice(1);
 
   function menuLink(url: string, pageName: string) {
     const onPage = pathname === url;
@@ -24,10 +25,10 @@ export default function Navbar() {
   }
 
   return (
-    <div className="w-full items-center heading py-4 flex flex-row justify-between">
+    <div className="w-full bg-surfaceContainer items-center heading p-4 flex flex-row justify-between">
       <Link href="/dashboard">
         <span className=" text-2xl lg:text-4xl text-darkText">
-          Invoice Tracker
+          {globalPageName}
         </span>
       </Link>
       <span className="hidden md:flex flex-row gap-8">
@@ -36,7 +37,7 @@ export default function Navbar() {
         {menuLink("/clients", "clients")}
         {menuLink("/expenses", "expenses")}
       </span>
-      <div className="md:hidden">
+      <div className="hidden md:hidden">
         <button onClick={() => setIsOpen(!isOpen)}>
           {isOpen ? <X /> : <Menu />}
         </button>
