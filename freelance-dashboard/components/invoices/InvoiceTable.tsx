@@ -1,25 +1,99 @@
 "use client";
 import getAllInvoices from "@/lib/queries/invoices";
-import SecondaryButton from "../ui/SecondaryButton";
-import ErrorButton from "../ui/ErrorButton";
 import { useState } from "react";
 import Link from "next/link";
+import { Invoice } from "@/types";
+import { invoiceStatuses } from "@/lib/utils";
+import { MoveUpRight } from "lucide-react";
 
 interface InvoiceTableProps {
   allInvoices: ReturnType<typeof getAllInvoices>;
   deleteInvoiceMethod: (invoiceId: number) => void;
+  filterStatus?: Invoice["status"];
+  updateInvoiceAction: (
+    invoiceId: number,
+    status: Invoice["status"],
+  ) => Promise<void>;
 }
 export default function InvoiceTable({
   allInvoices,
-  deleteInvoiceMethod,
+  updateInvoiceAction,
+  filterStatus,
 }: InvoiceTableProps) {
-  const [isDeleting, setIsDeleting] = useState(false);
+  function getDueDaysRemaining(dueDate: Date) {
+    const dateNow = new Date();
+    const remainingDateMilli = dueDate.valueOf() - dateNow.valueOf();
+    const remainingDate = remainingDateMilli / (1000 * 60 * 60 * 24);
+    return remainingDate.toFixed(0);
+  }
+  function handleStatusUpdate(id: number, status: Invoice["status"]) {
+    updateInvoiceAction(id, status);
+  }
+  if (filterStatus) {
+    allInvoices = allInvoices.filter(
+      (invoice) => invoice.invoices.status === filterStatus,
+    );
+  }
   return allInvoices.map((invoice) => {
+    const statusColour = (() => {
+      if (invoice.invoices.status === "paid")
+        return "border-green-700/50 text-green-700";
+      if (invoice.invoices.status === "sent") return "border-outline/50";
+      if (invoice.invoices.status === "draft") return "border-outline/50";
+      if (invoice.invoices.status === "overdue")
+        return "border-error/50 text-error";
+    })();
     return (
       <div
         key={invoice.invoices.id}
-        className="invoice p-8 flex bg-tertiaryContainer  heading flex-col gap-4 rounded-2xl w-full text-onTertiaryContainer border border-outline/20"
+        className={`invoice p-4 flex bg-secondary heading flex-col gap-0.5 rounded-2xl w-full text-onSecondary border relative ${statusColour}`}
       >
+        <span className="text-onTertiaryContainer/50 text-lg italic font-[Helvetica]">
+          #{invoice.invoices.id}
+        </span>
+        <div className="absolute right-4 top-4">
+          <Link href={`/invoices/${invoice.invoices.id}`}>
+            <MoveUpRight className="w-10 h-10 text-outline" />
+          </Link>
+        </div>
+        <h3 className="font-[Helvetica] text-xl">{invoice.clients?.name}</h3>
+        <h4 className={`font-[Helvetica] font-bold text-4xl ${statusColour}`}>
+          £{invoice.invoices.amount}
+        </h4>
+        <h4 className="font-[Helvetica] text-xl">
+          due in {getDueDaysRemaining(invoice.invoices.dueDate!)} days |{" "}
+          {
+            <select
+              onChange={(e) => {
+                const newStatus = e.target.value as Invoice["status"];
+                handleStatusUpdate(Number(invoice.invoices.id), newStatus);
+              }}
+            >
+              <option value={invoice.invoices.status}>
+                {invoice.invoices.status}
+              </option>
+              {invoiceStatuses.map((status) => {
+                if (status === invoice.invoices.status) {
+                  return;
+                }
+                return (
+                  <option key={status} value={status}>
+                    {status}
+                  </option>
+                );
+              })}
+            </select>
+          }
+        </h4>
+      </div>
+    );
+  });
+}
+
+/*
+ *
+ * old code for table
+ 
         <table>
           <tbody>
             <tr>
@@ -76,7 +150,4 @@ export default function InvoiceTable({
             isDisabled={isDeleting}
           />
         </div>
-      </div>
-    );
-  });
-}
+        */

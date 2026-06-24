@@ -30,9 +30,11 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${neuton.className} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full max-w-7xl mx-auto flex flex-col bg-background">
+      <body className="mx-auto flex flex-col justify-center items-center bg-background">
         <Navbar />
-        <section className="px-2">{children}</section>
+        <section className="min-h-full w-full max-w-7xl px-2">
+          {children}
+        </section>
         <BottomBar />
       </body>
     </html>

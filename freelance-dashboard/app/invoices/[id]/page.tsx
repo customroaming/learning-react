@@ -1,6 +1,6 @@
 import IndividualInvoice from "@/components/invoices/IndividualInvoice";
 import getAllInvoices from "@/lib/queries/invoices";
-import { updateInvoiceStatus } from "../actions";
+import { deleteInvoice, updateInvoiceStatus } from "../actions";
 
 type IndividualInvoicePageProps = {
   params: Promise<{ id: string }>;
@@ -15,6 +15,7 @@ export default async function IndividualInvoicePage({
   return (
     <IndividualInvoice
       updateInvoiceAction={updateInvoiceStatus}
+      deleteInvoiceAction={deleteInvoice}
       invoices={allInvoices}
       invoiceId={id}
     />

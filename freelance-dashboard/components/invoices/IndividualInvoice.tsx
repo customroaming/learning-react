@@ -4,10 +4,13 @@ import getAllInvoices from "@/lib/queries/invoices";
 import { invoiceStatuses } from "@/lib/utils";
 import { Invoice } from "@/types";
 import { useState } from "react";
+import ErrorButton from "../ui/ErrorButton";
+import { redirect } from "next/navigation";
 
 type IndividualInvoiceProps = {
   invoiceId: string;
   invoices: Awaited<ReturnType<typeof getAllInvoices>>;
+  deleteInvoiceAction: (invoiceId: number) => void;
   updateInvoiceAction: (
     invoiceId: number,
     status: Invoice["status"],
@@ -17,8 +20,10 @@ export default function IndividualInvoice({
   invoices,
   invoiceId,
   updateInvoiceAction,
+  deleteInvoiceAction,
 }: IndividualInvoiceProps) {
   const id = invoiceId;
+  const [isDeleting, setIsDeleting] = useState(false);
   const filteredInvoice = invoices.filter(
     (invoice) => invoice.invoices.id === Number(id),
   );
@@ -75,6 +80,19 @@ export default function IndividualInvoice({
                 })}
               </select>
             </div>
+            <ErrorButton
+              ctaText="delete invoice"
+              onClick={async (e) => {
+                setIsDeleting(true);
+                try {
+                  deleteInvoiceAction(invoice.invoices.id);
+                } finally {
+                  setIsDeleting(false);
+                  redirect("/invoices");
+                }
+              }}
+              isDisabled={isDeleting}
+            />
           </div>
         );
       })}

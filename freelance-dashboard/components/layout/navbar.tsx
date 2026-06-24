@@ -27,7 +27,7 @@ export default function Navbar() {
   return (
     <div className="w-full bg-surfaceContainer items-center heading p-4 flex flex-row justify-between">
       <Link href="/dashboard">
-        <span className=" text-2xl lg:text-4xl text-darkText">
+        <span className=" text-3xl lg:text-4xl text-darkText">
           {globalPageName}
         </span>
       </Link>
