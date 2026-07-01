@@ -1,5 +1,5 @@
 "use client";
-import getAllInvoices from "@/lib/queries/invoices";
+import { getAllInvoices } from "@/lib/queries/invoices";
 import { useState } from "react";
 import Link from "next/link";
 import { Invoice } from "@/types";
@@ -58,7 +58,7 @@ export default function InvoiceTable({
         </div>
         <h3 className="font-[Helvetica] text-xl">{invoice.clients?.name}</h3>
         <h4 className={`font-[Helvetica] font-bold text-4xl ${statusColour}`}>
-          £{invoice.invoices.amount}
+          £{invoice.total}
         </h4>
         <h4 className="font-[Helvetica] text-xl">
           due in {getDueDaysRemaining(invoice.invoices.dueDate!)} days |{" "}

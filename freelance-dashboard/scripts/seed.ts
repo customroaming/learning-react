@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { users, clients, expenses, invoices } from "@/db/schema";
+import { users, clients, expenses, invoices, invoiceItems } from "@/db/schema";
 import { sql } from "drizzle-orm";
 import { formatCurrency } from "@/lib/utils";
 
@@ -11,6 +11,7 @@ expiry.setDate(expiry.getDate() + 14);
 //
 // delete expenses, invoices, clients, users
 db.run(sql`DELETE FROM expenses`);
+db.run(sql`DELETE FROM invoice_items`);
 db.run(sql`DELETE FROM invoices`);
 db.run(sql`DELETE FROM clients`);
 db.run(sql`DELETE FROM users`);
@@ -49,28 +50,63 @@ const [insertedClientTwo] = db
   .returning()
   .all();
 
-const invoice = db
+const [invoice] = db
   .insert(invoices)
   .values({
-    amount: 33.24,
     userId: insertedUser.id,
     clientId: insertedClient.id,
     status: "sent",
     dueDate: expiry,
   })
-  .run();
+  .returning()
+  .all();
 
-const invoiceTwo = db
+const [invoiceTwo] = db
   .insert(invoices)
   .values({
-    amount: 69,
     userId: insertedUser.id,
     clientId: insertedClientTwo.id,
     status: "paid",
     dueDate: expiry,
   })
+  .returning()
+  .all();
+
+const invoiceItem = db
+  .insert(invoiceItems)
+  .values({
+    invoiceId: invoice.id,
+    description: "hosting fee",
+    type: "hosting",
+    unitPrice: 15,
+    quantity: 3,
+    amount: 45,
+  })
   .run();
 
+const invoiceItemTwo = db
+  .insert(invoiceItems)
+  .values({
+    invoiceId: invoiceTwo.id,
+    description: "hosting fee",
+    type: "hosting",
+    unitPrice: 15,
+    quantity: 3,
+    amount: 45,
+  })
+  .run();
+
+const invoiceItemThree = db
+  .insert(invoiceItems)
+  .values({
+    invoiceId: invoice.id,
+    description: "yearly domain renewal",
+    type: "domain",
+    unitPrice: 22.36,
+    quantity: 1,
+    amount: 22.36,
+  })
+  .run();
 // 3. Insert 3 clients using that user id, capture their ids
 
 // 4. Insert 6 invoices spread across those clients

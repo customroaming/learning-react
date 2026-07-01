@@ -1,13 +1,19 @@
 "use server";
-import { clients, invoices } from "@/db/schema";
+import { clients, invoiceItems, invoices } from "@/db/schema";
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
-import { Invoice, NewClient, NewInvoice } from "@/types";
+import { Invoice, NewClient, NewInvoice, NewInvoiceItem } from "@/types";
 import { redirect } from "next/navigation";
 import { eq } from "drizzle-orm";
 
-export async function createInvoice(invoice: NewInvoice) {
-  db.insert(invoices).values(invoice).run();
+export async function createInvoice(
+  invoice: NewInvoice,
+  items: NewInvoiceItem[],
+) {
+  const [inserted] = db.insert(invoices).values(invoice).returning().all();
+  db.insert(invoiceItems)
+    .values(items.map((item) => ({ ...item, invoiceId: inserted.id })))
+    .run();
   revalidatePath("/invoices");
   redirect("/invoices");
 }

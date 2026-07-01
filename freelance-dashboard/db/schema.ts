@@ -23,7 +23,6 @@ export const invoices = sqliteTable("invoices", {
     .references(() => users.id)
     .notNull(),
   clientId: integer("client_id").references(() => clients.id),
-  amount: real("amount").notNull(),
   status: text("status", {
     enum: ["draft", "sent", "paid", "overdue"],
   })
@@ -33,6 +32,20 @@ export const invoices = sqliteTable("invoices", {
     () => new Date(),
   ),
   dueDate: integer("due_date", { mode: "timestamp" }),
+});
+
+export const invoiceItems = sqliteTable("invoice_items", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  invoiceId: integer("invoice_id")
+    .notNull()
+    .references(() => invoices.id),
+  type: text("type", {
+    enum: ["hosting", "work", "domain", "one_off"],
+  }),
+  description: text("").notNull(),
+  quantity: real("quantity").notNull().default(1),
+  unitPrice: real("unit_price").notNull(),
+  amount: real("amount").notNull(),
 });
 
 export const expenses = sqliteTable("expenses", {

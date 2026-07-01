@@ -1,8 +1,8 @@
 "use client";
 import { updateInvoiceStatus } from "@/app/invoices/actions";
-import getAllInvoices from "@/lib/queries/invoices";
+import { getAllInvoices } from "@/lib/queries/invoices";
 import { invoiceStatuses } from "@/lib/utils";
-import { Invoice } from "@/types";
+import { Invoice, InvoiceItem } from "@/types";
 import { useState } from "react";
 import ErrorButton from "../ui/ErrorButton";
 import { redirect } from "next/navigation";
@@ -10,6 +10,7 @@ import { redirect } from "next/navigation";
 type IndividualInvoiceProps = {
   invoiceId: string;
   invoices: Awaited<ReturnType<typeof getAllInvoices>>;
+  invoiceItems: InvoiceItem[];
   deleteInvoiceAction: (invoiceId: number) => void;
   updateInvoiceAction: (
     invoiceId: number,
@@ -19,6 +20,7 @@ type IndividualInvoiceProps = {
 export default function IndividualInvoice({
   invoices,
   invoiceId,
+  invoiceItems,
   updateInvoiceAction,
   deleteInvoiceAction,
 }: IndividualInvoiceProps) {
@@ -42,9 +44,12 @@ export default function IndividualInvoice({
       <h1 className="text-5xl">Invoice ID: #{id}</h1>
       {filteredInvoice.map((invoice) => {
         return (
-          <div key={invoice.invoices.id} className="text-3xl">
+          <div
+            key={invoice.invoices.id}
+            className="flex flex-col gap-2 text-3xl"
+          >
             <p>To: {invoice.clients?.name}</p>
-            <p>Amount: £{invoice.invoices.amount}</p>
+
             <p>
               Status:
               <span
@@ -59,7 +64,7 @@ export default function IndividualInvoice({
               </span>
             </p>
             <div className="flex flex-row gap-4">
-              <p>New Status:</p>
+              <p>Update Status:</p>
               <select
                 onChange={(e) => {
                   const newStatus = e.target.value as Invoice["status"];
@@ -79,6 +84,51 @@ export default function IndividualInvoice({
                   );
                 })}
               </select>
+            </div>
+            <div className="overflow-x-auto hidden md:block">
+              <table className="w-full ">
+                <thead>
+                  <tr className="text-left">
+                    <th>Description</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                    <th>Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {invoiceItems.map((item) => (
+                    <tr key={item.id}>
+                      <td>{item.description}</td>
+                      <td>{item.quantity}</td>
+                      <td>£{item.unitPrice}</td>
+                      <td>£{item.amount}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="items flex flex-col gap-2 md:hidden">
+              {invoiceItems.map((item) => (
+                <div
+                  key={item.id}
+                  className="flex gap-1 flex-col p-2 rounded-lg bg-tertiaryContainer text-onTertiaryContainer"
+                >
+                  <div className="flex flex-row justify-between">
+                    <p>{item.description}</p>
+                    <p>£{item.amount}</p>
+                  </div>
+                  <hr className="text-outline" />
+                  <div className="flex flex-row justify-between">
+                    <p>Quantity:</p>
+                    <p>{item.quantity}</p>
+                  </div>
+                  <div className="flex flex-row justify-between">
+                    <p>Unit Price:</p>
+                    <p>£{item.unitPrice}</p>
+                  </div>
+                </div>
+              ))}
+              <p>Amount: £{invoice.total}</p>
             </div>
             <ErrorButton
               ctaText="delete invoice"
