@@ -10,6 +10,13 @@ type InvoiceFormProps = {
   createClientAction: (client: NewClient) => Promise<number>;
 };
 
+interface LineItem {
+  type: "hosting" | "work" | "domain" | "one_off";
+  description: string;
+  quantity: number;
+  unitPrice: number;
+}
+
 export default function InvoiceForm({
   clients,
   createMethodAction,
@@ -23,6 +30,15 @@ export default function InvoiceForm({
   const [selectedClient, setSelectedClient] = useState<string>("new");
   const isExistingClient = selectedClient !== "new";
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
+  const [lineItems, setLineItems] = useState<LineItem[]>([
+    {
+      type: "hosting",
+      description: "Monthly Web Hosting",
+      quantity: 1,
+      unitPrice: 15,
+    },
+  ]);
   //
   //replace with actual auth when implemented
   //
@@ -60,8 +76,18 @@ export default function InvoiceForm({
     );
   }
 
+  function updateLineItem(
+    index: number,
+    field: keyof LineItem,
+    value: string | number,
+  ) {
+    setLineItems((prev) =>
+      prev.map((item, i) => (i === index ? { ...item, [field]: value } : item)),
+    );
+  }
+
   return (
-    <form>
+    <form className="invoiceForm shadow-md flex-col flex gap-4 p-8 rounded-lg bg-tertiaryContainer mt-8">
       <select
         value={selectedClient}
         onChange={(e) => handleClientChange(e.target.value)}
@@ -93,12 +119,54 @@ export default function InvoiceForm({
         onChange={(e) => setNewBusinessName(e.target.value)}
         disabled={isExistingClient}
       />
-      <input
-        placeholder="amount"
-        value={newAmount}
-        type="number"
-        onChange={(e) => setNewAmount(Number(e.target.value))}
-      />
+      <p className="text-lg">Invoice Items:</p>
+      {lineItems.map((item, index) => {
+        return (
+          <div key={index} className="flex flex-row justify-between">
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-row gap-4 items-center">
+                <label className="text-lg w-30">Type:</label>
+                <select
+                  value={lineItems[index].type}
+                  onChange={(e) => {
+                    updateLineItem(index, "type", e.target.value);
+                    if (e.target.value !== "work") {
+                      updateLineItem(index, "quantity", 1);
+                    }
+                  }}
+                >
+                  <option value="hosting">Hosting</option>
+                  <option value="one_off">One Off</option>
+                  <option value="work">Web Work</option>
+                  <option value="domain">Domain Renewal</option>
+                </select>
+              </div>
+
+              <div className="flex flex-row gap-4 items-center">
+                <label className="text-lg w-30">Description:</label>
+                <input
+                  placeholder="Description"
+                  value={lineItems[index].description}
+                  onChange={(e) =>
+                    updateLineItem(index, "description", e.target.value)
+                  }
+                />
+              </div>
+              <div className="flex flex-row gap-4 items-center">
+                <label className="text-lg w-30">Unit Price:</label>
+                <input
+                  placeholder="Unit Price"
+                  value={lineItems[index].unitPrice}
+                  onChange={(e) =>
+                    updateLineItem(index, "unitPrice", e.target.value)
+                  }
+                />
+              </div>
+            </div>
+          </div>
+        );
+      })}
+
       <PrimaryButton
         ctaText="create invoice"
         onClick={async (e) => {

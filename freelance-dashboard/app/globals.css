@@ -28,6 +28,15 @@ body {
   color: var(--color-onTertiary);
 }
 
+.invoiceForm input,
+.invoiceForm select {
+  padding: 12px 24px;
+  font-size: 18px;
+  border-radius: 0px;
+  border-bottom: solid 1px var(--color-onTertiaryContainer);
+  color: var(--color-onTertiaryContainer);
+  outline: none !important;
+}
 .heading {
   font-family: "Neuton", "Arial";
 }
