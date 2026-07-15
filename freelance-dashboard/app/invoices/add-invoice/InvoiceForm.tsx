@@ -2,6 +2,7 @@
 
 import PrimaryButton from "@/components/ui/PrimaryButton";
 import { Client, NewClient, NewInvoice } from "@/types";
+import { Cross, Plus, X } from "lucide-react";
 import { useState } from "react";
 
 type InvoiceFormProps = {
@@ -39,6 +40,11 @@ export default function InvoiceForm({
       unitPrice: 15,
     },
   ]);
+
+  const total = lineItems.reduce(
+    (sum, item) => sum + item.quantity * item.unitPrice,
+    0,
+  );
   //
   //replace with actual auth when implemented
   //
@@ -76,6 +82,20 @@ export default function InvoiceForm({
     );
   }
 
+  function removeLineItem(index: number) {
+    setLineItems((prev) => prev.filter((item, i) => i !== index));
+  }
+  function addLineItem() {
+    setLineItems((prev) => [
+      ...prev,
+      {
+        type: "hosting",
+        description: "",
+        quantity: 1,
+        unitPrice: 0,
+      },
+    ]);
+  }
   function updateLineItem(
     index: number,
     field: keyof LineItem,
@@ -122,7 +142,10 @@ export default function InvoiceForm({
       <p className="text-lg">Invoice Items:</p>
       {lineItems.map((item, index) => {
         return (
-          <div key={index} className="flex flex-row justify-between">
+          <div
+            key={index}
+            className="flex flex-row justify-between items-center p-8 bg-background rounded-lg"
+          >
             <div className="flex flex-col gap-4">
               <div className="flex flex-row gap-4 items-center">
                 <label className="text-lg w-30">Type:</label>
@@ -155,6 +178,7 @@ export default function InvoiceForm({
               <div className="flex flex-row gap-4 items-center">
                 <label className="text-lg w-30">Unit Price:</label>
                 <input
+                  type="number"
                   placeholder="Unit Price"
                   value={lineItems[index].unitPrice}
                   onChange={(e) =>
@@ -163,10 +187,24 @@ export default function InvoiceForm({
                 />
               </div>
             </div>
+            <X
+              className="cursor-pointer hover:scale-120 transition-all"
+              size={32}
+              onClick={() => removeLineItem(index)}
+            />
           </div>
         );
       })}
-
+      <Plus
+        size={32}
+        className="text-black rounded-full bg-background hover:scale-110 cursor-pointer"
+        onClick={() => {
+          addLineItem();
+        }}
+      />
+      <div className="flex flex-row justify-between items-center p-8 bg-background rounded-lg">
+        <span className="text-xl font-bold">Total: {total}</span>
+      </div>
       <PrimaryButton
         ctaText="create invoice"
         onClick={async (e) => {
