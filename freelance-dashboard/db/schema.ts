@@ -41,7 +41,7 @@ export const invoiceItems = sqliteTable("invoice_items", {
     .references(() => invoices.id),
   type: text("type", {
     enum: ["hosting", "work", "domain", "one_off"],
-  }),
+  }).notNull(),
   description: text("").notNull(),
   quantity: real("quantity").notNull().default(1),
   unitPrice: real("unit_price").notNull(),

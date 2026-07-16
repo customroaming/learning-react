@@ -9,3 +9,10 @@ export type Expense = typeof expenses.$inferSelect;
 export type NewInvoice = typeof invoices.$inferInsert;
 export type NewClient = typeof clients.$inferInsert;
 export type NewInvoiceItem = typeof invoiceItems.$inferInsert;
+
+export interface LineItem {
+  type: "hosting" | "work" | "domain" | "one_off";
+  description: string;
+  quantity: number;
+  unitPrice: number;
+}

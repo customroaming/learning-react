@@ -1,22 +1,25 @@
 "use client";
 
 import PrimaryButton from "@/components/ui/PrimaryButton";
-import { Client, NewClient, NewInvoice } from "@/types";
+import {
+  Client,
+  LineItem,
+  NewClient,
+  NewInvoice,
+  NewInvoiceItem,
+} from "@/types";
 import { Cross, Plus, X } from "lucide-react";
 import { useState } from "react";
+import { getLatestInvoice } from "../actions";
 
 type InvoiceFormProps = {
   clients: Client[];
-  createMethodAction: (invoice: NewInvoice) => void;
+  createMethodAction: (
+    invoice: NewInvoice,
+    items: Promise<NewInvoiceItem[]>,
+  ) => void;
   createClientAction: (client: NewClient) => Promise<number>;
 };
-
-interface LineItem {
-  type: "hosting" | "work" | "domain" | "one_off";
-  description: string;
-  quantity: number;
-  unitPrice: number;
-}
 
 export default function InvoiceForm({
   clients,
@@ -54,7 +57,7 @@ export default function InvoiceForm({
   const expiry = new Date();
   expiry.setDate(expiry.getDate() + 14);
 
-  function handleClientChange(clientId: string) {
+  async function handleClientChange(clientId: string) {
     setSelectedClient(clientId);
 
     if (clientId == "new") {
@@ -72,6 +75,9 @@ export default function InvoiceForm({
     setNewEmail(client.email);
     setNewAddress(client.address);
     setNewBusinessName(client.businessName);
+
+    const previousItems = await getLatestInvoice(Number(clientId));
+    setLineItems(previousItems);
   }
 
   function optionClients(clients: Client) {
@@ -186,6 +192,19 @@ export default function InvoiceForm({
                   }
                 />
               </div>
+              {lineItems[index].type === "work" && (
+                <div className="flex flex-row gap-4 items-center">
+                  <label className="text-lg w-30">Unit Price:</label>
+                  <input
+                    type="number"
+                    placeholder="Quantity"
+                    value={lineItems[index].quantity}
+                    onChange={(e) =>
+                      updateLineItem(index, "quantity", e.target.value)
+                    }
+                  />
+                </div>
+              )}
             </div>
             <X
               className="cursor-pointer hover:scale-120 transition-all"
@@ -234,11 +253,10 @@ export default function InvoiceForm({
               createdAt: currentDate,
               dueDate: expiry,
               status: "sent",
-              amount: newAmount,
               userId: userId,
             };
 
-            createMethodAction(newInvoice);
+            createMethodAction(newInvoice, lineItems);
           } finally {
             setIsSubmitting(false);
           }

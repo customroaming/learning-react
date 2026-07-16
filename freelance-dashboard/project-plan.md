@@ -377,7 +377,7 @@ with seed data in them.
 - [x] Build `app/invoices/page.tsx` as a server component that queries DB
 - [x] Build `components/invoices/InvoiceTable.tsx` as a client component
 - [ ] Build `components/invoices/InvoiceRow.tsx`
-- [ ] Build `components/ui/Badge.tsx` for status display (paid/unpaid etc.)
+- [x] Build `components/ui/Badge.tsx` for status display (paid/unpaid etc.)
 - [x] Create `app/invoices/actions.ts` with Server Actions:
   - createInvoice
   - updateInvoice
