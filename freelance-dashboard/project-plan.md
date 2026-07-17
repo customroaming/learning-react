@@ -397,13 +397,13 @@ the list, change its status, and delete it — all persisting to SQLite.
 
 **Goal:** Client list, detail page, create/edit, invoice history per client.
 
-- [ ] Build `app/clients/page.tsx` — server component, query all clients
-- [ ] Build `components/clients/ClientList.tsx`
-- [ ] Create `app/clients/actions.ts` with createClient, updateClient
-- [ ] Build `app/clients/new/page.tsx` with ClientForm
-- [ ] Build `app/clients/[id]/page.tsx` — client detail + their invoices
+- [x] Build `app/clients/page.tsx` — server component, query all clients
+- [x] Build `components/clients/ClientList.tsx`
+- [x] Create `app/clients/actions.ts` with createClient, updateClient
+- [x] Build `app/clients/new/page.tsx` with ClientForm
+- [x] Build `app/clients/[id]/page.tsx` — client detail + their invoices
       (Drizzle join: select invoices where clientId = params.id)
-- [ ] Link invoices to clients in the invoice form (select dropdown)
+- [x] Link invoices to clients in the invoice form (select dropdown)
 
 **You're done with Phase 4 when:** Every invoice is linked to a client and
 you can view a client's full invoice history on their detail page.
@@ -414,7 +414,7 @@ you can view a client's full invoice history on their detail page.
 
 **Goal:** Live transaction data in the app via Monzo API.
 
-- [ ] Add Monzo access token to `.env.local`
+- [x] Add Monzo access token to `.env.local`
 - [ ] Create `lib/monzo.ts` with typed fetch wrapper:
   ```typescript
   export async function getTransactions(): Promise<MonzoTransaction[]> {

@@ -14,10 +14,7 @@ import { getLatestInvoice } from "../actions";
 
 type InvoiceFormProps = {
   clients: Client[];
-  createMethodAction: (
-    invoice: NewInvoice,
-    items: Promise<NewInvoiceItem[]>,
-  ) => void;
+  createMethodAction: (invoice: NewInvoice, items: LineItem[]) => void;
   createClientAction: (client: NewClient) => Promise<number>;
 };
 
@@ -194,7 +191,7 @@ export default function InvoiceForm({
               </div>
               {lineItems[index].type === "work" && (
                 <div className="flex flex-row gap-4 items-center">
-                  <label className="text-lg w-30">Unit Price:</label>
+                  <label className="text-lg w-30">Quantity:</label>
                   <input
                     type="number"
                     placeholder="Quantity"

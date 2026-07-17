@@ -22,6 +22,7 @@ export async function createInvoice(invoice: NewInvoice, items: LineItem[]) {
 }
 
 export async function deleteInvoice(invoiceId: number) {
+  db.delete(invoiceItems).where(eq(invoiceItems.invoiceId, invoiceId)).run();
   db.delete(invoices).where(eq(invoices.id, invoiceId)).run();
   revalidatePath("/invoices");
 }

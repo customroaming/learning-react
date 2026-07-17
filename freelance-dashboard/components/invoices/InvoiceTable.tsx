@@ -10,6 +10,7 @@ interface InvoiceTableProps {
   allInvoices: ReturnType<typeof getAllInvoices>;
   deleteInvoiceMethod: (invoiceId: number) => void;
   filterStatus?: Invoice["status"];
+  filterClient?: Invoice["clientId"];
   updateInvoiceAction: (
     invoiceId: number,
     status: Invoice["status"],
@@ -19,6 +20,7 @@ export default function InvoiceTable({
   allInvoices,
   updateInvoiceAction,
   filterStatus,
+  filterClient,
 }: InvoiceTableProps) {
   function getDueDaysRemaining(dueDate: Date) {
     const dateNow = new Date();
@@ -32,6 +34,11 @@ export default function InvoiceTable({
   if (filterStatus) {
     allInvoices = allInvoices.filter(
       (invoice) => invoice.invoices.status === filterStatus,
+    );
+  }
+  if (filterClient) {
+    allInvoices = allInvoices.filter(
+      (invoice) => invoice.invoices.clientId === filterClient,
     );
   }
   return allInvoices.map((invoice) => {
