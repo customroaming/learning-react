@@ -16,3 +16,12 @@ export interface LineItem {
   quantity: number;
   unitPrice: number;
 }
+
+export interface MonzoTransaction {
+  id: string;
+  created: string;
+  description: string;
+  amount: number;
+  notes: string;
+  settled: string;
+}
