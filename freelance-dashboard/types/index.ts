@@ -24,12 +24,19 @@ export interface MonzoTransaction {
   amount: number;
   notes: string;
   settled: string;
+  merchant: MonzoMerchant | null;
 }
 
-export interface MonzoMerchen {
+export interface MonzoMerchant {
   id: string;
   name: string;
   category: string;
   logo: string;
   emoji: string;
+}
+
+export interface MonzoBalance {
+  balance: number;
+  total_balance: number;
+  spend_today: number;
 }

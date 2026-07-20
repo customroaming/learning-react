@@ -36,6 +36,10 @@
   /* Error */
   --color-error: #dc2626;
   --color-onError: #ffffff;
+
+  /* Custom Fonts */
+  --font-inter: "Inter", sans-serif;
+  --font-manrope: "Manrope", serif;
 }
 /*
  *@theme {

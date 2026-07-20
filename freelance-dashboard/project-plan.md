@@ -415,7 +415,7 @@ you can view a client's full invoice history on their detail page.
 **Goal:** Live transaction data in the app via Monzo API.
 
 - [x] Add Monzo access token to `.env.local`
-- [ ] Create `lib/monzo.ts` with typed fetch wrapper:
+- [x] Create `lib/monzo.ts` with typed fetch wrapper:
   ```typescript
   export async function getTransactions(): Promise<MonzoTransaction[]> {
     const res = await fetch("https://api.monzo.com/transactions?...", {
@@ -424,9 +424,9 @@ you can view a client's full invoice history on their detail page.
     return res.json();
   }
   ```
-- [ ] Create `app/api/monzo/transactions/route.ts` as a proxy endpoint
-- [ ] Build `components/dashboard/RecentTransactions.tsx`
-- [ ] Display recent transactions on the dashboard
+- [x] Create `app/api/monzo/transactions/route.ts` as a proxy endpoint
+- [x] Build `components/dashboard/RecentTransactions.tsx`
+- [x] Display recent transactions on the dashboard
 
 Token note: Monzo personal tokens expire after 8 hours. When yours expires,
 generate a new one from the Monzo developer playground and update `.env.local`,

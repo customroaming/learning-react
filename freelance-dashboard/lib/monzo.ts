@@ -15,3 +15,19 @@ export async function getTransactions(): Promise<MonzoTransaction[]> {
 
   return data.transactions;
 }
+
+export async function getBalance() {
+  const accountId = process.env.MONZO_ACCOUNT_ID;
+  const res = await fetch(
+    `https://api.monzo.com/balance?account_id=${accountId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.MONZO_ACCESS_TOKEN}`,
+      },
+    },
+  );
+  if (!res.ok) throw new Error(`Monzo API error: ${res.status}`);
+  const data = await res.json();
+
+  return data;
+}
