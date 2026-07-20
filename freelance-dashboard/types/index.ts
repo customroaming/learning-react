@@ -25,3 +25,11 @@ export interface MonzoTransaction {
   notes: string;
   settled: string;
 }
+
+export interface MonzoMerchen {
+  id: string;
+  name: string;
+  category: string;
+  logo: string;
+  emoji: string;
+}
