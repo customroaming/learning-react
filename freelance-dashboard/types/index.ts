@@ -1,9 +1,9 @@
-import { invoices, clients, expenses, invoiceItems } from "@/db/schema";
+import { invoices, clients, transactions, invoiceItems } from "@/db/schema";
 
 export type Invoice = typeof invoices.$inferSelect;
 export type InvoiceItem = typeof invoiceItems.$inferSelect;
 export type Client = typeof clients.$inferSelect;
-export type Expense = typeof expenses.$inferSelect;
+export type Transaction = typeof transactions.$inferSelect;
 
 //$inferInsert infers data types needed to insert data into db, $inferSelect does the same fo r the data coming out the db.
 export type NewInvoice = typeof invoices.$inferInsert;
@@ -25,6 +25,7 @@ export interface MonzoTransaction {
   notes: string;
   settled: string;
   merchant: MonzoMerchant | null;
+  category: string;
 }
 
 export interface MonzoMerchant {

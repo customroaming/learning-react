@@ -1,7 +1,10 @@
 import { MonzoTransaction } from "@/types";
+import { db } from "./db";
+import { transactions } from "@/db/schema";
+
+const accountId = process.env.MONZO_ACCOUNT_ID;
 
 export async function getTransactions(): Promise<MonzoTransaction[]> {
-  const accountId = process.env.MONZO_ACCOUNT_ID;
   const res = await fetch(
     `https://api.monzo.com/transactions?account_id=${accountId}&expand[]=merchant`,
     {
@@ -17,7 +20,6 @@ export async function getTransactions(): Promise<MonzoTransaction[]> {
 }
 
 export async function getBalance() {
-  const accountId = process.env.MONZO_ACCOUNT_ID;
   const res = await fetch(
     `https://api.monzo.com/balance?account_id=${accountId}`,
     {
@@ -30,4 +32,22 @@ export async function getBalance() {
   const data = await res.json();
 
   return data;
+}
+
+export async function syncTransactions() {
+  const allTransactions = await getTransactions();
+  await db
+    .insert(transactions)
+    .values(
+      allTransactions.map((transaction) => ({
+        date: new Date(transaction.created),
+        userId: 1,
+        amount: transaction.amount,
+        description: transaction.description,
+        transactionId: transaction.id,
+        category: transaction.category,
+        notes: transaction.notes === "" ? "Business" : transaction.notes,
+      })),
+    )
+    .onConflictDoNothing();
 }

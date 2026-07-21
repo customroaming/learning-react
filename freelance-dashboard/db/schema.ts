@@ -48,11 +48,13 @@ export const invoiceItems = sqliteTable("invoice_items", {
   amount: real("amount").notNull(),
 });
 
-export const expenses = sqliteTable("expenses", {
+export const transactions = sqliteTable("transactions", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   userId: integer("user_id").references(() => users.id),
   amount: real("amount").notNull(),
   description: text("description").notNull(),
   date: integer("date", { mode: "timestamp" }),
   transactionId: text("transaction_id").notNull().unique(),
+  category: text("category").notNull(),
+  notes: text("notes"),
 });
