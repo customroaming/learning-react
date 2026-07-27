@@ -13,7 +13,11 @@ export async function getTransactions(): Promise<MonzoTransaction[]> {
       },
     },
   );
-  if (!res.ok) throw new Error(`Monzo API error: ${res.status}`);
+  if (!res.ok) {
+    const error = await res.json();
+    console.log("Monzo error:", error);
+    throw new Error(`Monzo API error: ${res.status}`);
+  }
   const data = await res.json();
 
   return data.transactions;
@@ -47,6 +51,8 @@ export async function syncTransactions() {
         transactionId: transaction.id,
         category: transaction.category,
         notes: transaction.notes === "" ? "Business" : transaction.notes,
+        merchantName: transaction.merchant?.name,
+        merchantEmoji: transaction.merchant?.emoji,
       })),
     )
     .onConflictDoNothing();

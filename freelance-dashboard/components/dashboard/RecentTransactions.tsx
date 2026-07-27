@@ -12,7 +12,7 @@ export default function RecentTransactions({
     <div className="flex flex-col gap-4">
       <h2 className="text-2xl md:text-3xl">Recent Transactions</h2>
       <div className="flex flex-row flex-wrap gap-4 md:grid-cols-2 md:grid">
-        {transactions.map((transaction) => {
+        {transactions.reverse().map((transaction) => {
           const amount = transaction.amount / 100;
           const formattedDate = new Intl.DateTimeFormat("en-GB", {
             day: "numeric",

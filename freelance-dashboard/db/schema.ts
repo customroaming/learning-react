@@ -56,5 +56,7 @@ export const transactions = sqliteTable("transactions", {
   date: integer("date", { mode: "timestamp" }),
   transactionId: text("transaction_id").notNull().unique(),
   category: text("category").notNull(),
-  notes: text("notes"),
+  notes: text("notes").notNull(),
+  merchantName: text("merchant_name").notNull(),
+  merchantEmoji: text("merchant_emoji").notNull(),
 });
