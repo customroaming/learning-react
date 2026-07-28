@@ -57,6 +57,6 @@ export const transactions = sqliteTable("transactions", {
   transactionId: text("transaction_id").notNull().unique(),
   category: text("category").notNull(),
   notes: text("notes").notNull(),
-  merchantName: text("merchant_name").notNull(),
-  merchantEmoji: text("merchant_emoji").notNull(),
+  merchantName: text("merchant_name"),
+  merchantEmoji: text("merchant_emoji"),
 });

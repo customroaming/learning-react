@@ -51,8 +51,12 @@ export async function syncTransactions() {
         transactionId: transaction.id,
         category: transaction.category,
         notes: transaction.notes === "" ? "Business" : transaction.notes,
-        merchantName: transaction.merchant?.name,
-        merchantEmoji: transaction.merchant?.emoji,
+        merchantName: transaction.merchant?.name
+          ? transaction.merchant?.name
+          : "No Merchant",
+        merchantEmoji: transaction.merchant?.emoji
+          ? transaction.merchant.emoji
+          : "💕",
       })),
     )
     .onConflictDoNothing();
