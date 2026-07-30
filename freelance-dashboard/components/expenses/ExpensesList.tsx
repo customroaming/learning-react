@@ -19,6 +19,9 @@ export default function ExpensesList({ allTransactions }: ExpensesListProps) {
     (e) => selectedCategory === "All" || e.notes === selectedCategory,
   );
 
+  const expenseTotalSum =
+    (filteredExpenses.reduce((sum, item) => sum + item.amount, 0) / 100) * -1;
+
   return (
     <div className="flex flex-col gap-4 md:grid md:grid-cols-2">
       <div className="flex flex-row gap-2 md:col-span-2">
@@ -35,6 +38,9 @@ export default function ExpensesList({ allTransactions }: ExpensesListProps) {
             onClick={() => setSelectedCategory(c ?? "All")}
           />
         ))}
+      </div>
+      <div className="text-2xl">
+        Total expenses for {selectedCategory} is £{expenseTotalSum}
       </div>
       {filteredExpenses.map((transaction) => {
         const amount = transaction.amount / 100;

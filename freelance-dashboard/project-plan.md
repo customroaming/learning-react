@@ -440,7 +440,7 @@ then restart the dev server. This is expected behaviour for the personal API.
 
 - [x] Build `app/expenses/page.tsx`
 - [x] Sync Monzo transactions into the expenses table in SQLite
-- [ ] Allow manual category override per expense
+- [x] Allow manual category override per expense
 - [ ] Running totals by category
 - [ ] Tax year filter (April to April for UK self-assessment)
 
