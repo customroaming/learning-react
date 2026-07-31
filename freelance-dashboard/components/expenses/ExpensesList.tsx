@@ -14,13 +14,20 @@ export default function ExpensesList({ allTransactions }: ExpensesListProps) {
   );
   const categories = [...new Set(expenses.map((e) => e.notes))];
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [lastTaxYear, setLastTaxYear] = useState(false);
 
   const filteredExpenses = expenses.filter(
     (e) => selectedCategory === "All" || e.notes === selectedCategory,
   );
 
+  const expensesToShow = lastTaxYear
+    ? filteredExpenses.filter(
+        (expense) => expense.date > new Date("2026-07-15"),
+      )
+    : filteredExpenses;
+
   const expenseTotalSum =
-    (filteredExpenses.reduce((sum, item) => sum + item.amount, 0) / 100) * -1;
+    (expensesToShow.reduce((sum, item) => sum + item.amount, 0) / 100) * -1;
 
   return (
     <div className="flex flex-col gap-4 md:grid md:grid-cols-2">
@@ -42,7 +49,12 @@ export default function ExpensesList({ allTransactions }: ExpensesListProps) {
       <div className="text-2xl">
         Total expenses for {selectedCategory} is £{expenseTotalSum}
       </div>
-      {filteredExpenses.map((transaction) => {
+      <SecondaryButtonOutline
+        ctaText="Expenses for last tax year"
+        onClick={() => setLastTaxYear((prev) => !prev)}
+        active={lastTaxYear === true}
+      />
+      {expensesToShow.map((transaction) => {
         const amount = transaction.amount / 100;
         const formattedDate = new Intl.DateTimeFormat("en-GB", {
           day: "numeric",

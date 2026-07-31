@@ -53,7 +53,7 @@ export const transactions = sqliteTable("transactions", {
   userId: integer("user_id").references(() => users.id),
   amount: real("amount").notNull(),
   description: text("description").notNull(),
-  date: integer("date", { mode: "timestamp" }),
+  date: integer("date", { mode: "timestamp" }).notNull(),
   transactionId: text("transaction_id").notNull().unique(),
   category: text("category").notNull(),
   notes: text("notes").notNull(),
