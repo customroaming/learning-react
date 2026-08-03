@@ -47,3 +47,12 @@ export async function deleteClient(clientId: number) {
   revalidatePath("/clients");
   redirect("/clients");
 }
+
+export async function getClient(clientId: number) {
+  const client = db
+    .select()
+    .from(clients)
+    .where(eq(clients.id, clientId))
+    .get();
+  return client;
+}

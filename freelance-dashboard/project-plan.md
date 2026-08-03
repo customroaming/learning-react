@@ -442,7 +442,7 @@ then restart the dev server. This is expected behaviour for the personal API.
 - [x] Sync Monzo transactions into the expenses table in SQLite
 - [x] Allow manual category override per expense
 - [x] Running totals by category
-- [ ] Tax year filter (April to April for UK self-assessment)
+- [x] Tax year filter (April to April for UK self-assessment)
 
 ---
 

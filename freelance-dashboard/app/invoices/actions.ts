@@ -60,3 +60,12 @@ export async function getLatestInvoice(clientId: number): Promise<LineItem[]> {
     amount: item.amount,
   }));
 }
+
+export async function getInvoice(invoiceId: number) {
+  const invoice = db
+    .select()
+    .from(invoices)
+    .where(eq(invoices.id, invoiceId))
+    .get();
+  return invoice;
+}
