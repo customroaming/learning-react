@@ -42,7 +42,7 @@ export default function RootLayout({
     >
       <body className="mx-auto flex flex-col justify-center items-center">
         <Navbar />
-        <section className="min-h-full w-full max-w-7xl px-2">
+        <section className="min-h-full w-full max-w-7xl px-2 pb-32">
           {children}
         </section>
         <BottomBar />

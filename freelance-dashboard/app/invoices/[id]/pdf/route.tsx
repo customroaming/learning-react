@@ -1,32 +1,15 @@
-import InvoicePDF from "@/components/invoices/pdfs/InvoicePDF";
-import { renderToBuffer } from "@react-pdf/renderer";
 import { NextRequest } from "next/server";
-import { getInvoice } from "../../actions";
-import { getClient } from "@/app/clients/actions";
-import { getInvoiceItems } from "@/lib/queries/invoices";
+import { generateInvoicePDF } from "@/lib/pdf/generateInvoicePdf";
+import { getInvoiceData } from "@/lib/invoices/getInvoiceData";
 
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
-  const theInvoice = await getInvoice(Number(id));
-  if (!theInvoice) {
-    return new Response("Invoice Not Found", {
-      status: 404,
-    });
-  }
+  const data = getInvoiceData(Number(id));
+  const pdf = await generateInvoicePDF(data);
 
-  const theClient = await getClient(Number(theInvoice?.clientId));
-  const allInvoiceItems = getInvoiceItems(Number(id));
-  const document = (
-    <InvoicePDF
-      invoice={theInvoice}
-      client={theClient!}
-      invoiceItems={allInvoiceItems!}
-    />
-  );
-  const pdf = await renderToBuffer(document);
   return new Response(new Uint8Array(pdf), {
     headers: {
       "Content-Type": "application/pdf",

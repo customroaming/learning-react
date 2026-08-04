@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
   },
   p: {
-    fontSize: 14,
+    fontSize: 12,
     letterSpacing: 0,
   },
   textRight: {
@@ -198,6 +198,17 @@ export default function InvoicePDF({
                 £{invoiceItems.reduce((sum, item) => sum + item.amount, 0)}
               </Text>
             </View>
+          </View>
+        </View>
+        <View style={styles.divider}></View>
+        <View style={[styles.column, styles.gapMd]}>
+          <Text style={styles.subheading}>TERMS AND CONDITIONS</Text>
+          <View style={[styles.column, styles.p]}>
+            <Text>Payment is due within 15 days of receipt.</Text>
+            <Text>Payment by bank transfer to the following account:</Text>
+            <Text>Account holder: William Harper</Text>
+            <Text>Sort code: 04-00-05</Text>
+            <Text>Account number: 32978966</Text>
           </View>
         </View>
       </Page>

@@ -11,10 +11,7 @@ interface InvoiceTableProps {
   deleteInvoiceMethod: (invoiceId: number) => void;
   filterStatus?: Invoice["status"];
   filterClient?: Invoice["clientId"];
-  updateInvoiceAction: (
-    invoiceId: number,
-    status: Invoice["status"],
-  ) => Promise<void>;
+  updateInvoiceAction: (invoiceId: number, status: Invoice["status"]) => void;
 }
 export default function InvoiceTable({
   allInvoices,

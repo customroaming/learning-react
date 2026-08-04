@@ -450,9 +450,9 @@ then restart the dev server. This is expected behaviour for the personal API.
 
 **Goal:** Downloadable invoice PDFs, send invoice via email.
 
-- [ ] Build `InvoicePDF` component using @react-pdf/renderer
-- [ ] Create a Route Handler that generates and returns a PDF buffer
-- [ ] Add "Download PDF" button to invoice detail page
+- [x] Build `InvoicePDF` component using @react-pdf/renderer
+- [x] Create a Route Handler that generates and returns a PDF buffer
+- [x] Add "Download PDF" button to invoice detail page
 - [ ] Build `InvoiceEmail` component using @react-email/components
 - [ ] Create Server Action that sends email via Resend with PDF attached
 - [ ] Add "Send Invoice" button to invoice detail page

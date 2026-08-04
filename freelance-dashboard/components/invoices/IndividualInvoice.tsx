@@ -6,6 +6,8 @@ import { Invoice, InvoiceItem } from "@/types";
 import { useState } from "react";
 import ErrorButton from "../ui/ErrorButton";
 import { redirect } from "next/navigation";
+import SecondaryButton from "../ui/SecondaryButton";
+import Link from "next/link";
 
 type IndividualInvoiceProps = {
   invoiceId: string;
@@ -130,6 +132,9 @@ export default function IndividualInvoice({
               ))}
               <p>Amount: £{invoice.total}</p>
             </div>
+            <Link href={`/invoices/${invoice.invoices.id}/pdf`}>
+              <SecondaryButton ctaText="View Invoice" />
+            </Link>
             <ErrorButton
               ctaText="delete invoice"
               onClick={async (e) => {
