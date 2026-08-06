@@ -1,7 +1,6 @@
-import { getClient } from "@/app/clients/actions";
-import { getInvoice } from "@/app/invoices/actions";
-import { getInvoiceItems } from "../queries/invoices";
+import { getInvoice, getInvoiceItems } from "../queries/invoices";
 import { GenerateInvoicePDFProps } from "../pdf/generateInvoicePdf";
+import { getClient } from "../queries/clients";
 
 export function getInvoiceData(id: number): GenerateInvoicePDFProps {
   const theInvoice = getInvoice(Number(id));

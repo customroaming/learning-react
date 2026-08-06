@@ -5,6 +5,10 @@ import { revalidatePath } from "next/cache";
 import { Invoice, LineItem, NewInvoice } from "@/types";
 import { redirect } from "next/navigation";
 import { desc, eq } from "drizzle-orm";
+import { generateInvoicePDF } from "@/lib/pdf/generateInvoicePdf";
+import { getInvoiceData } from "@/lib/invoices/getInvoiceData";
+import { resend } from "@/lib/resend";
+import InvoiceEmail from "@/components/invoices/emails/InvoiceEmail";
 
 export async function createInvoice(invoice: NewInvoice, items: LineItem[]) {
   const [inserted] = db.insert(invoices).values(invoice).returning().all();
@@ -61,11 +65,23 @@ export async function getLatestInvoice(clientId: number): Promise<LineItem[]> {
   }));
 }
 
-export async function getInvoice(invoiceId: number) {
-  const invoice = db
-    .select()
-    .from(invoices)
-    .where(eq(invoices.id, invoiceId))
-    .get();
-  return invoice;
+export async function sendInvoice(invoiceId: number) {
+  const data = getInvoiceData(invoiceId);
+  const pdf = await generateInvoicePDF(data);
+  await resend.emails.send({
+    from: "will.harper@solira.uk",
+    to: data.theClient.email,
+    subject: `Invoice #${data.theInvoice.id}`,
+    react: InvoiceEmail({
+      invoice: data.theInvoice,
+      client: data.theClient,
+      invoiceItems: data.allInvoiceItems,
+    }),
+    attachments: [
+      {
+        filename: `invoice-${data.theInvoice.id}.pdf`,
+        content: pdf,
+      },
+    ],
+  });
 }

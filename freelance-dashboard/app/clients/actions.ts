@@ -1,3 +1,4 @@
+"use server";
 import { clients, invoiceItems, invoices } from "@/db/schema";
 import { db } from "@/lib/db";
 import { Client, NewClient, NewInvoice } from "@/types";
@@ -14,12 +15,7 @@ export async function createClient(client: NewClient): Promise<number> {
   return result.id;
 }
 
-export function getAllClients(): Client[] {
-  const result = db.select().from(clients).all();
-  return result;
-}
-
-export function updateClient(client: Client) {
+export async function updateClient(client: Client) {
   db.update(clients)
     .set({
       name: client.name,
@@ -33,7 +29,7 @@ export function updateClient(client: Client) {
   revalidatePath("/invoices", "layout");
 }
 
-export function deleteClient(clientId: number) {
+export async function deleteClient(clientId: number) {
   const clientInvoices = db
     .select()
     .from(invoices)
@@ -45,13 +41,4 @@ export function deleteClient(clientId: number) {
   db.delete(clients).where(eq(clients.id, clientId)).run();
   revalidatePath("/clients");
   redirect("/clients");
-}
-
-export function getClient(clientId: number) {
-  const client = db
-    .select()
-    .from(clients)
-    .where(eq(clients.id, clientId))
-    .get();
-  return client;
 }

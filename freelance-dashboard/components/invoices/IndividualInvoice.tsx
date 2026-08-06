@@ -1,5 +1,5 @@
 "use client";
-import { updateInvoiceStatus } from "@/app/invoices/actions";
+import { sendInvoice, updateInvoiceStatus } from "@/app/invoices/actions";
 import { getAllInvoices } from "@/lib/queries/invoices";
 import { invoiceStatuses } from "@/lib/utils";
 import { Invoice, InvoiceItem } from "@/types";
@@ -135,6 +135,10 @@ export default function IndividualInvoice({
             <Link href={`/invoices/${invoice.invoices.id}/pdf`}>
               <SecondaryButton ctaText="View Invoice" />
             </Link>
+            <SecondaryButton
+              ctaText="Send Invoice"
+              onClick={() => sendInvoice(invoice.invoices.id)}
+            />
             <ErrorButton
               ctaText="delete invoice"
               onClick={async (e) => {

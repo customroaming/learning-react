@@ -1,7 +1,7 @@
-"use server";
 import { clients, invoices } from "@/db/schema";
 import { db } from "@/lib/db";
 import { Client, NewClient, NewInvoice } from "@/types";
+import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -22,4 +22,13 @@ export async function createClient(client: NewClient): Promise<number> {
 
 export async function getAllClients() {
   return db.select().from(clients).all();
+}
+
+export function getClient(clientId: number) {
+  const client = db
+    .select()
+    .from(clients)
+    .where(eq(clients.id, clientId))
+    .get();
+  return client;
 }

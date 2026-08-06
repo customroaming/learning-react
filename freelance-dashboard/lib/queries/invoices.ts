@@ -37,3 +37,12 @@ export function getInvoiceItems(invoiceId: number): InvoiceItem[] {
     .all();
   return items;
 }
+
+export function getInvoice(invoiceId: number) {
+  const invoice = db
+    .select()
+    .from(invoices)
+    .where(eq(invoices.id, invoiceId))
+    .get();
+  return invoice;
+}
