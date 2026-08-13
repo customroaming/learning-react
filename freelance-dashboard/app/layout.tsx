@@ -40,7 +40,7 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${manrope.variable} ${neuton.className} ${geistMono.variable} ${inter.variable} h-full antialiased`}
     >
-      <body className="mx-auto flex flex-col justify-center items-center">
+      <body className="mx-auto bg-background flex flex-col justify-center items-center">
         <Navbar />
         <section className="min-h-full w-full max-w-7xl px-2 pb-32">
           {children}

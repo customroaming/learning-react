@@ -8,8 +8,15 @@ export default function CurrentBalance({ balance }: CurrentBalanceProps) {
   const currentBalance = balance.balance / 100;
   return (
     <div className="flex flex-col gap-2 mb-8">
-      <h2 className="text-2xl md:text-3xl">Current Balance:</h2>
-      <span className="font-manrope text-2xl">£{currentBalance}</span>
+      <h2 className="md:text-md uppercase font-manrope text-sm font-semibold text-textSecondary">
+        Current Balance:
+      </h2>
+      <span className="font-serif text-6xl md:text-7xl">
+        £{currentBalance.toFixed(2)}
+      </span>
+      <span className="font-manrope text-textTertiary text-sm">
+        Synced from Monzo just now
+      </span>
     </div>
   );
 }

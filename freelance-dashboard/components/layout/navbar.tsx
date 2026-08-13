@@ -16,7 +16,7 @@ export default function Navbar() {
     return (
       <Link href={url}>
         <button
-          className={`text-xl transition-all text-onSecondary cursor-pointer leading-4 pb-3 pt-2 px-6 hover:bg-secondary hover:text-onSecondary active:bg-primary rounded-full ${onPage ? " bg-secondary" : ""}`}
+          className={`text-xl transition-all text-onSecondary cursor-pointer leading-4 pb-3 pt-2 px-2 hover:bg-secondary hover:text-onSecondary active:bg-primary rounded-full ${onPage ? " bg-secondary" : ""}`}
         >
           {pageName}
         </button>
@@ -25,9 +25,9 @@ export default function Navbar() {
   }
 
   return (
-    <div className="w-full bg-surfaceContainer items-center heading p-4 flex flex-row justify-between">
+    <div className="w-full bg-surfaceContainer items-center mb-8 py-4 border-b-secondary border-b heading p-2 flex flex-row justify-between">
       <Link href="/dashboard">
-        <span className=" text-3xl lg:text-4xl text-darkText">
+        <span className=" text-3xl capitalize lg:text-4xl text-darkText font-serif">
           {globalPageName}
         </span>
       </Link>
