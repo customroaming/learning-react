@@ -4,14 +4,47 @@ import { transactions } from "@/db/schema";
 
 const accountId = process.env.MONZO_ACCOUNT_ID;
 
-export async function getTransactions(): Promise<MonzoTransaction[]> {
-  const res = await fetch(
-    `https://api.monzo.com/transactions?account_id=${accountId}&expand[]=merchant`,
-    {
-      headers: {
-        Authorization: `Bearer ${process.env.MONZO_ACCESS_TOKEN}`,
-      },
+async function refreshMonzoAccessToken() {
+  const res = await fetch("https://api.monzo.com/oauth2/token", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
     },
+    body: new URLSearchParams({
+      grant_type: "refreh_token",
+      client_id: process.env.MONZO_CLIENT_ID!,
+      client_secret: process.env.MONZO_CLIENT_SECRET!,
+      refresh_token: process.env.MONZO_REFRESH_TOKEN!,
+    }),
+  });
+  if (!res.ok) {
+    const error = await res.text();
+    throw new Error(`failed to refresh monzo token: ${error}`);
+  }
+  const data = await res.json();
+  return data;
+}
+async function monzoFetch(url: string) {
+  let res = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${process.env.MONZO_ACCESS_TOKEN}`,
+    },
+  });
+  if (res.status !== 401) {
+    return res;
+  }
+  const tokens = await refreshMonzoAccessToken();
+  res = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${tokens.access_token}`,
+    },
+  });
+  return res;
+}
+
+export async function getTransactions(): Promise<MonzoTransaction[]> {
+  const res = await monzoFetch(
+    `https://api.monzo.com/transactions?account_id=${accountId}&expand[]=merchant`,
   );
   if (!res.ok) {
     const error = await res.json();
