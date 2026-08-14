@@ -41,55 +41,52 @@ export default function InvoiceTable({
   return allInvoices.map((invoice) => {
     const statusColour = (() => {
       if (invoice.invoices.status === "paid")
-        return "border-green-700/50 text-green-700";
-      if (invoice.invoices.status === "sent") return "border-outline/50";
-      if (invoice.invoices.status === "draft") return "border-outline/50";
+        return "border-outlineStrong text-green-700";
+      if (invoice.invoices.status === "sent") return "border-outlineStrong";
+      if (invoice.invoices.status === "draft") return "border-outlineStrong";
       if (invoice.invoices.status === "overdue")
-        return "border-error/50 text-error";
+        return "border-onOverdue text-onOverdue";
+    })();
+
+    const statusBadge = (() => {
+      if (invoice.invoices.status === "paid") return "bg-paid text-onPaid";
+      if (invoice.invoices.status === "sent")
+        return "bg-pending text-onPending";
+      if (invoice.invoices.status === "draft")
+        return "bg-pending text-onPending";
+      if (invoice.invoices.status === "overdue")
+        return "bg-overdue text-onOverdue";
     })();
     return (
-      <div
-        key={invoice.invoices.id}
-        className={`invoice p-4 flex bg-secondary heading flex-col gap-0.5 rounded-2xl w-full text-onSecondary border relative ${statusColour}`}
-      >
-        <span className="text-onTertiaryContainer/50 text-lg italic font-[Helvetica]">
-          #{invoice.invoices.id}
-        </span>
-        <div className="absolute right-4 top-4">
-          <Link href={`/invoices/${invoice.invoices.id}`}>
-            <MoveUpRight className="w-10 h-10 text-outline" />
-          </Link>
-        </div>
-        <h3 className="font-[Helvetica] text-xl">{invoice.clients?.name}</h3>
-        <h4 className={`font-[Helvetica] font-bold text-4xl ${statusColour}`}>
-          £{invoice.total}
-        </h4>
-        <h4 className="font-[Helvetica] text-xl">
-          due in {getDueDaysRemaining(invoice.invoices.dueDate!)} days |{" "}
-          {
-            <select
-              onChange={(e) => {
-                const newStatus = e.target.value as Invoice["status"];
-                handleStatusUpdate(Number(invoice.invoices.id), newStatus);
-              }}
+      <Link key={invoice.invoices.id} href={`/invoices/${invoice.invoices.id}`}>
+        <div
+          className={`invoice p-4 flex heading flex-col gap-2 rounded-2xl w-full text-onSecondary border relative bg-surfaceContainer ${statusColour}`}
+        >
+          <div className="flex flex-row items-center justify-between">
+            <span className="text-textTertiary text-md font-manrope">
+              #{invoice.invoices.id}
+            </span>
+            <span
+              className={`capitalize font-manrope text-sm px-4 py-1 font-semibold rounded-full ${statusBadge}`}
             >
-              <option value={invoice.invoices.status}>
-                {invoice.invoices.status}
-              </option>
-              {invoiceStatuses.map((status) => {
-                if (status === invoice.invoices.status) {
-                  return;
-                }
-                return (
-                  <option key={status} value={status}>
-                    {status}
-                  </option>
-                );
-              })}
-            </select>
-          }
-        </h4>
-      </div>
+              {invoice.invoices.status}
+            </span>
+          </div>
+          <div className="flex flex-row items-center justify-between">
+            <h3 className="font-manrope font-semibold tracking-tight text-xl">
+              {invoice.clients?.name}
+            </h3>
+            <h4 className={`font-serif font-bold text-3xl`}>
+              £{invoice.total}
+            </h4>
+          </div>
+          <h4
+            className={`font-manrope text-sm ${invoice.invoices.status === "overdue" ? "text-onOverdue" : "text-textSecondary"}`}
+          >
+            Due in {getDueDaysRemaining(invoice.invoices.dueDate!)} days{" "}
+          </h4>
+        </div>
+      </Link>
     );
   });
 }

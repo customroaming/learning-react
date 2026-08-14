@@ -1,5 +1,4 @@
 import { MonzoTransaction } from "@/types";
-import { BanknoteArrowDown, BanknoteArrowUp, Minus, Plus } from "lucide-react";
 
 type RecentTransactionsProps = {
   transactions: MonzoTransaction[];

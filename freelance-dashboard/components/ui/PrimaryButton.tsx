@@ -11,7 +11,7 @@ export default function PrimaryButton({
   return (
     <button
       onClick={onClick}
-      className="bg-realPrimary text-onRealPrimary text-xl transition-all cursor-pointer leading-4 w-fit pb-3 hover:bg-primary hover:text-onPrimary pt-2 px-6 rounded-full"
+      className="bg-realPrimary text-onRealPrimary text-xl transition-all cursor-pointer leading-normal w-fit tracking-tight hover:bg-primary hover:text-onPrimary py-2 px-8 rounded-full font-manrope font-semibold"
       disabled={isDisabled}
     >
       {ctaText}
