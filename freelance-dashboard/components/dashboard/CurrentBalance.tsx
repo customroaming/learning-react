@@ -11,7 +11,7 @@ export default function CurrentBalance({ balance }: CurrentBalanceProps) {
       <h2 className="md:text-md uppercase font-manrope text-sm font-semibold text-textSecondary">
         Current Balance:
       </h2>
-      <span className="font-serif text-6xl md:text-7xl">
+      <span className="font-serif text-6xl md:text-7xl mb-2">
         £{currentBalance.toFixed(2)}
       </span>
       <span className="font-manrope text-textTertiary text-sm">

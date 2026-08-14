@@ -89,8 +89,8 @@ body {
   padding-bottom: 48px;
 }
 ::selection {
-  background-color: var(--color-tertiary);
-  color: var(--color-onTertiary);
+  background-color: var(--color-realPrimary);
+  color: var(--color-onRealPrimary);
 }
 
 .invoiceForm input,
