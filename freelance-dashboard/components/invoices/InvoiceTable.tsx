@@ -9,7 +9,7 @@ import { MoveUpRight } from "lucide-react";
 interface InvoiceTableProps {
   allInvoices: ReturnType<typeof getAllInvoices>;
   deleteInvoiceMethod: (invoiceId: number) => void;
-  filterStatus?: Invoice["status"];
+  filterStatus?: Invoice["status"] | "All";
   filterClient?: Invoice["clientId"];
   updateInvoiceAction: (invoiceId: number, status: Invoice["status"]) => void;
 }
@@ -28,7 +28,7 @@ export default function InvoiceTable({
   function handleStatusUpdate(id: number, status: Invoice["status"]) {
     updateInvoiceAction(id, status);
   }
-  if (filterStatus) {
+  if (filterStatus && filterStatus !== "All") {
     allInvoices = allInvoices.filter(
       (invoice) => invoice.invoices.status === filterStatus,
     );

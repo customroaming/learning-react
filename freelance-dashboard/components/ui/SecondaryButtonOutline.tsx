@@ -13,7 +13,7 @@ export default function SecondaryButtonOutline({
   return (
     <button
       onClick={onClick}
-      className={`text-realSecondary ${active ? "bg-primary" : ""} ${active ? "text-onPrimary" : ""} text-xl transition-all cursor-pointer leading-4 w-fit pb-3 border border-realSecondary hover:bg-primary hover:text-onPrimary pt-2 px-6 rounded-full`}
+      className={`text-realSecondary ${active ? "border-realPrimary" : "border-outline"} ${active ? "bg-realPrimary" : ""} ${active ? "text-onPrimary" : ""} text-xl transition-all cursor-pointer leading-normal w-fit border hover:border-realPrimary/20 hover:bg-realPrimary/80 py-2 px-8 rounded-full font-manrope capitalize`}
       disabled={isDisabled}
     >
       {ctaText}

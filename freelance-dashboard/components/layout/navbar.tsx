@@ -27,8 +27,8 @@ export default function Navbar() {
   return (
     <div className="w-full bg-surfaceContainer items-center mb-8 py-4 border-b-secondary border-b heading p-2 flex flex-row justify-between">
       <Link href="/dashboard">
-        <span className=" text-3xl capitalize lg:text-4xl text-darkText font-serif">
-          {globalPageName}
+        <span className=" text-2xl capitalize lg:text-3xl text-darkText font-serif">
+          Solira
         </span>
       </Link>
       <span className="hidden md:flex flex-row gap-8">
