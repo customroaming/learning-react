@@ -1,5 +1,11 @@
 import { sqliteTable, text, integer, real } from "drizzle-orm/sqlite-core";
 
+export const tokens = sqliteTable("tokens", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  accessToken: text("access_token").notNull(),
+  refreshToken: text("refresh_token").notNull(),
+});
+
 export const users = sqliteTable("users", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull(),

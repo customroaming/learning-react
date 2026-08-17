@@ -1,20 +1,27 @@
 import { MonzoTransaction } from "@/types";
 import { db } from "./db";
-import { transactions } from "@/db/schema";
+import { tokens, transactions } from "@/db/schema";
+import { updateTokens } from "./mutations/monzo";
+import { getDigestForWellKnownError } from "next/dist/server/app-render/create-error-handler";
 
 const accountId = process.env.MONZO_ACCOUNT_ID;
 
-async function refreshMonzoAccessToken() {
+function getTokens() {
+  const data = db.select().from(tokens).all();
+  return data[0];
+}
+
+async function refreshMonzoAccessToken(refresh: string) {
   const res = await fetch("https://api.monzo.com/oauth2/token", {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
     },
     body: new URLSearchParams({
-      grant_type: "refreh_token",
+      grant_type: "refresh_token",
       client_id: process.env.MONZO_CLIENT_ID!,
       client_secret: process.env.MONZO_CLIENT_SECRET!,
-      refresh_token: process.env.MONZO_REFRESH_TOKEN!,
+      refresh_token: refresh,
     }),
   });
   if (!res.ok) {
@@ -22,18 +29,25 @@ async function refreshMonzoAccessToken() {
     throw new Error(`failed to refresh monzo token: ${error}`);
   }
   const data = await res.json();
+  console.log(data);
+  updateTokens({
+    access: data.access_token,
+    refresh: data.refresh_token,
+  });
   return data;
 }
+
 async function monzoFetch(url: string) {
+  const data = getTokens();
   let res = await fetch(url, {
     headers: {
-      Authorization: `Bearer ${process.env.MONZO_ACCESS_TOKEN}`,
+      Authorization: `Bearer ${data.accessToken}`,
     },
   });
   if (res.status !== 401) {
     return res;
   }
-  const tokens = await refreshMonzoAccessToken();
+  const tokens = await refreshMonzoAccessToken(data.refreshToken);
   res = await fetch(url, {
     headers: {
       Authorization: `Bearer ${tokens.access_token}`,
@@ -57,13 +71,8 @@ export async function getTransactions(): Promise<MonzoTransaction[]> {
 }
 
 export async function getBalance() {
-  const res = await fetch(
+  const res = await monzoFetch(
     `https://api.monzo.com/balance?account_id=${accountId}`,
-    {
-      headers: {
-        Authorization: `Bearer ${process.env.MONZO_ACCESS_TOKEN}`,
-      },
-    },
   );
   if (!res.ok) throw new Error(`Monzo API error: ${res.status}`);
   const data = await res.json();

@@ -1,1 +1,0 @@
-ALTER TABLE `transactions` ADD `category` text NOT NULL;

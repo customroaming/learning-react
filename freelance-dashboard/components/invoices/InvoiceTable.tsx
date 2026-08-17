@@ -38,57 +38,77 @@ export default function InvoiceTable({
       (invoice) => invoice.invoices.clientId === filterClient,
     );
   }
-  return allInvoices.map((invoice) => {
-    const statusColour = (() => {
-      if (invoice.invoices.status === "paid")
-        return "border-outlineStrong text-green-700";
-      if (invoice.invoices.status === "sent") return "border-outlineStrong";
-      if (invoice.invoices.status === "draft") return "border-outlineStrong";
-      if (invoice.invoices.status === "overdue")
-        return "border-onOverdue text-onOverdue";
-    })();
+  return (
+    <>
+      <table>
+        <thead>
+          <tr>
+            <td>Invoice</td>
+            <td>Client</td>
+            <td>Amount</td>
+            <td>Due</td>
+            <td>Status</td>
+          </tr>
+        </thead>
+      </table>
+      {allInvoices.map((invoice) => {
+        const statusColour = (() => {
+          if (invoice.invoices.status === "paid")
+            return "border-outlineStrong text-green-700";
+          if (invoice.invoices.status === "sent") return "border-outlineStrong";
+          if (invoice.invoices.status === "draft")
+            return "border-outlineStrong";
+          if (invoice.invoices.status === "overdue")
+            return "border-onOverdue text-onOverdue";
+        })();
 
-    const statusBadge = (() => {
-      if (invoice.invoices.status === "paid") return "bg-paid text-onPaid";
-      if (invoice.invoices.status === "sent")
-        return "bg-pending text-onPending";
-      if (invoice.invoices.status === "draft")
-        return "bg-pending text-onPending";
-      if (invoice.invoices.status === "overdue")
-        return "bg-overdue text-onOverdue";
-    })();
-    return (
-      <Link key={invoice.invoices.id} href={`/invoices/${invoice.invoices.id}`}>
-        <div
-          className={`invoice p-4 flex heading flex-col gap-2 rounded-2xl w-full text-onSecondary border relative bg-surfaceContainer ${statusColour}`}
-        >
-          <div className="flex flex-row items-center justify-between">
-            <span className="text-textTertiary text-md font-manrope">
-              #{invoice.invoices.id}
-            </span>
-            <span
-              className={`capitalize font-manrope text-sm px-4 py-1 font-semibold rounded-full ${statusBadge}`}
-            >
-              {invoice.invoices.status}
-            </span>
-          </div>
-          <div className="flex flex-row items-center justify-between">
-            <h3 className="font-manrope font-semibold tracking-tight text-xl">
-              {invoice.clients?.name}
-            </h3>
-            <h4 className={`font-serif font-bold text-3xl`}>
-              £{invoice.total}
-            </h4>
-          </div>
-          <h4
-            className={`font-manrope text-sm ${invoice.invoices.status === "overdue" ? "text-onOverdue" : "text-textSecondary"}`}
+        const statusBadge = (() => {
+          if (invoice.invoices.status === "paid") return "bg-paid text-onPaid";
+          if (invoice.invoices.status === "sent")
+            return "bg-pending text-onPending";
+          if (invoice.invoices.status === "draft")
+            return "bg-pending text-onPending";
+          if (invoice.invoices.status === "overdue")
+            return "bg-overdue text-onOverdue";
+        })();
+        return (
+          <Link
+            key={invoice.invoices.id}
+            href={`/invoices/${invoice.invoices.id}`}
           >
-            Due in {getDueDaysRemaining(invoice.invoices.dueDate!)} days{" "}
-          </h4>
-        </div>
-      </Link>
-    );
-  });
+            <div
+              className={`invoice lg:hidden p-4 flex heading flex-col gap-2 rounded-2xl w-full text-onSecondary border relative bg-surfaceContainer ${statusColour}`}
+            >
+              <div className="flex flex-row items-center justify-between">
+                <span className="text-textTertiary text-md font-manrope">
+                  #{invoice.invoices.id}
+                </span>
+                <span
+                  className={`capitalize font-manrope text-sm px-4 py-1 font-semibold rounded-full ${statusBadge}`}
+                >
+                  {invoice.invoices.status}
+                </span>
+              </div>
+              <div className="flex flex-row items-center justify-between">
+                <h3 className="font-manrope font-semibold tracking-tight text-xl">
+                  {invoice.clients?.name}
+                </h3>
+                <h4 className={`font-serif font-bold text-3xl`}>
+                  £{invoice.total}
+                </h4>
+              </div>
+              <h4
+                className={`font-manrope text-sm ${invoice.invoices.status === "overdue" ? "text-onOverdue" : "text-textSecondary"}`}
+              >
+                Due in {getDueDaysRemaining(invoice.invoices.dueDate!)}{" "}
+                days{" "}
+              </h4>
+            </div>
+          </Link>
+        );
+      })}
+    </>
+  );
 }
 
 /*

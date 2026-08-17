@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { users, clients, expenses, invoices, invoiceItems } from "@/db/schema";
+import { users, clients, invoices, invoiceItems, tokens } from "@/db/schema";
 import { sql } from "drizzle-orm";
 import { formatCurrency } from "@/lib/utils";
 
@@ -10,13 +10,23 @@ expiry.setDate(expiry.getDate() + 14);
 // 1. Clear existing data (reverse order)
 //
 // delete expenses, invoices, clients, users
-db.run(sql`DELETE FROM expenses`);
+db.run(sql`DELETE FROM transactions`);
 db.run(sql`DELETE FROM invoice_items`);
 db.run(sql`DELETE FROM invoices`);
 db.run(sql`DELETE FROM clients`);
 db.run(sql`DELETE FROM users`);
-
+db.run(sql`DELETE FROM tokens`);
 db.run(sql`DELETE FROM sqlite_sequence`);
+
+const currentTokens = db
+  .insert(tokens)
+  .values({
+    accessToken:
+      "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJlYiI6IjdFaEY0K1lxVi9GTlZHMFc4OTcwIiwianRpIjoiYWNjdG9rXzAwMDBCOVRJM0x3T0kxMVJwem5HZGUiLCJ0eXAiOiJhdCIsInYiOiI2In0.1flyzvQv784begXJf1bxJ9VNzb_PJQniKGR2jQAtDamqfbB_qOcR0viROcwKUc3FwpfeRSTDHtgCU4TF6_xI4A",
+    refreshToken:
+      "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJlYiI6InpqeE5rdnhHUDY2SllyZUhRMU1lIiwianRpIjoicmVmdG9rXzAwMDBCOVRJM00xTHpaUHBkQnRLa3IiLCJ0eXAiOiJydCIsInYiOiI2In0.V1GxXEnvq6w_w8gzCPTdt13gTdYB1Y8pJNopJDyKNxrznvUI2XRcaRmhsK9yjlaXYHrkJDDkRo4HQmRBtr2K8A",
+  })
+  .run();
 
 // 2. Insert user, capture the id
 const [insertedUser] = db
