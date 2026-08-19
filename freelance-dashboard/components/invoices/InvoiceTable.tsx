@@ -40,17 +40,56 @@ export default function InvoiceTable({
   }
   return (
     <>
-      <table>
-        <thead>
-          <tr>
-            <td>Invoice</td>
-            <td>Client</td>
-            <td>Amount</td>
-            <td>Due</td>
-            <td>Status</td>
-          </tr>
-        </thead>
-      </table>
+      <div className="hidden lg:block w-full rounded-xl overflow-hidden border border-outline">
+        <table className="lg:table w-full text-left [&_td]:p-4 font-manrope [&_thead]:text-textSecondary [&_thead]:text-sm [&_thead]:font-semibold [&_thead]:uppercase">
+          <thead className="bg-outline/75">
+            <tr>
+              <td>Invoice</td>
+              <td>Client</td>
+              <td className="text-right">Amount</td>
+              <td>Due</td>
+              <td>Status</td>
+              <td></td>
+            </tr>
+          </thead>
+          <tbody>
+            {allInvoices.map((invoice) => {
+              const statusBadge = (() => {
+                if (invoice.invoices.status === "paid")
+                  return "bg-paid text-onPaid";
+                if (invoice.invoices.status === "sent")
+                  return "bg-pending text-onPending";
+                if (invoice.invoices.status === "draft")
+                  return "bg-pending text-onPending";
+                if (invoice.invoices.status === "overdue")
+                  return "bg-overdue text-onOverdue";
+              })();
+              return (
+                <tr key={invoice.invoices.id}>
+                  <td>#{invoice.invoices.id}</td>
+                  <td>{invoice.clients?.businessName}</td>
+                  <td className="text-right">£{invoice.total}</td>
+                  <td>
+                    Due in {getDueDaysRemaining(invoice.invoices.dueDate!)} days
+                  </td>
+                  <td>
+                    <span
+                      className={`capitalize font-manrope text-sm px-4 py-1 font-semibold rounded-full ${statusBadge}`}
+                    >
+                      {invoice.invoices.status}
+                    </span>
+                  </td>
+                  <td className="text-link hover:text-linkHover">
+                    <Link href={`/invoices/${invoice.invoices.id}`}>
+                      {"View ->"}
+                    </Link>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
       {allInvoices.map((invoice) => {
         const statusColour = (() => {
           if (invoice.invoices.status === "paid")

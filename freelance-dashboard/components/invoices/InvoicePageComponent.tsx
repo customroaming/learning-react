@@ -44,7 +44,7 @@ export default function InvoicePageComponent({
           />
         ))}
       </div>
-      <div className="flex flex-col gap-4 pt-4 w-full md:grid md:grid-cols-2">
+      <div className="flex flex-col gap-4 pt-4 w-full md:grid md:grid-cols-2 lg:flex-col lg:flex">
         <InvoiceTable
           allInvoices={allInvoices}
           updateInvoiceAction={updateInvoiceStatus}
