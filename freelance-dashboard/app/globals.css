@@ -77,10 +77,10 @@
 
   --color-outline: #e2d6dd;
 
-  --color-error: #dc2626;
-  --color-onError: #ffffff;
   */
 
+  --color-error: #dc2626;
+  --color-onError: #ffffff;
   --font-inter: "Inter", sans-serif;
   --font-manrope: "Manrope", serif;
 }

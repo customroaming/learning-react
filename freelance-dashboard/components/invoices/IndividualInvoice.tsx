@@ -8,6 +8,8 @@ import ErrorButton from "../ui/ErrorButton";
 import { redirect } from "next/navigation";
 import SecondaryButton from "../ui/SecondaryButton";
 import Link from "next/link";
+import StatusBadge from "../ui/StatusBadge";
+import SecondaryButtonOutline from "../ui/SecondaryButtonOutline";
 
 type IndividualInvoiceProps = {
   invoiceId: string;
@@ -42,50 +44,44 @@ export default function IndividualInvoice({
     updateInvoiceAction(id, status);
   }
   return (
-    <div className="flex flex-col gap-4">
-      <h1 className="text-5xl">Invoice ID: #{id}</h1>
+    <div className="flex font-manrope flex-col gap-8">
       {filteredInvoice.map((invoice) => {
         return (
           <div
             key={invoice.invoices.id}
-            className="flex flex-col gap-2 text-3xl"
+            className="flex flex-col gap-4 text-md"
           >
-            <p>To: {invoice.clients?.name}</p>
+            <div className=" flex flex-row justify-between">
+              <p className=" text-textSecondary font-semibold align-end leading-normal">
+                To: {invoice.clients?.businessName}
+              </p>
+              <StatusBadge status={invoice.invoices.status} />
+            </div>
 
-            <p>
-              Status:
-              <span
-                className={
-                  invoice.invoices.status === "paid"
-                    ? "text-green-800"
-                    : "text-error"
-                }
-              >
-                {" "}
-                {currentStatus}
-              </span>
-            </p>
-            <div className="flex flex-row gap-4">
-              <p>Update Status:</p>
-              <select
-                onChange={(e) => {
-                  const newStatus = e.target.value as Invoice["status"];
-                  setCurrentStatus(newStatus);
-                  handleStatusUpdate(Number(id), newStatus);
-                }}
-              >
-                <option value={currentStatus}>{currentStatus}</option>
-                {invoiceStatuses.map((status) => {
-                  if (status === invoice.invoices.status) {
-                    return;
-                  }
-                  return (
-                    <option key={status} value={status}>
-                      {status}
-                    </option>
-                  );
-                })}
-              </select>
+            <div className="flex flex-col gap-2">
+              <p className="font-semibold text-md">Update Status:</p>
+              <div className="flex flex-row gap-4">
+                <select
+                  className="capitalize w-full px-4 py-4 rounded-lg border-outline border bg-surfaceContainer"
+                  onChange={(e) => {
+                    const newStatus = e.target.value as Invoice["status"];
+                    setCurrentStatus(newStatus);
+                    handleStatusUpdate(Number(id), newStatus);
+                  }}
+                >
+                  <option value={currentStatus}>{currentStatus}</option>
+                  {invoiceStatuses.map((status) => {
+                    if (status === invoice.invoices.status) {
+                      return;
+                    }
+                    return (
+                      <option key={status} value={status}>
+                        {status}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
             </div>
             <div className="overflow-x-auto hidden md:block">
               <table className="w-full ">
@@ -109,35 +105,42 @@ export default function IndividualInvoice({
                 </tbody>
               </table>
             </div>
-            <div className="items flex flex-col gap-2 md:hidden">
+            <div className="items flex flex-col gap-4 md:hidden">
+              <h2 className="text-darkText text-xl font-semibold">
+                Invoice Items
+              </h2>
               {invoiceItems.map((item) => (
                 <div
                   key={item.id}
-                  className="flex gap-1 flex-col p-2 rounded-lg bg-tertiaryContainer text-onTertiaryContainer"
+                  className="flex gap-2 flex-col p-4 rounded-lg bg-secondary text-onTertiaryContainer"
                 >
-                  <div className="flex flex-row justify-between">
+                  <div className="flex flex-row text-lg font-semibold justify-between">
                     <p>{item.description}</p>
                     <p>£{item.amount}</p>
                   </div>
-                  <hr className="text-outline" />
-                  <div className="flex flex-row justify-between">
+                  <hr className="text-textTertiary" />
+                  <div className="flex text-textSecondary flex-row justify-between">
                     <p>Quantity:</p>
                     <p>{item.quantity}</p>
                   </div>
-                  <div className="flex flex-row justify-between">
+                  <div className="flex text-textSecondary flex-row justify-between">
                     <p>Unit Price:</p>
                     <p>£{item.unitPrice}</p>
                   </div>
                 </div>
               ))}
-              <p>Amount: £{invoice.total}</p>
+              <div className="capitalize items-center w-full px-4 py-4 flex flex-row rounded-lg border-outline border bg-surfaceContainer justify-between font-semibold">
+                <p className="text-xl">Total:</p>
+                <p className="text-3xl font-serif">£{invoice.total}</p>
+              </div>
             </div>
             <Link href={`/invoices/${invoice.invoices.id}/pdf`}>
-              <SecondaryButton ctaText="View Invoice" />
+              <SecondaryButtonOutline styles="w-full" ctaText="View Invoice" />
             </Link>
-            <SecondaryButton
+            <SecondaryButtonOutline
               ctaText="Send Invoice"
               onClick={() => sendInvoice(invoice.invoices.id)}
+              styles="w-full"
             />
             <ErrorButton
               ctaText="delete invoice"
@@ -151,6 +154,7 @@ export default function IndividualInvoice({
                 }
               }}
               isDisabled={isDeleting}
+              styles="w-full"
             />
           </div>
         );

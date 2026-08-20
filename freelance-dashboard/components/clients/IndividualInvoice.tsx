@@ -2,7 +2,6 @@
 import { Client } from "@/types";
 import { use, useState } from "react";
 import PrimaryButton from "../ui/PrimaryButton";
-import ErrorButton from "../ui/ErrorButton";
 import SecondaryButton from "../ui/SecondaryButton";
 
 type IndividualClientProps = {

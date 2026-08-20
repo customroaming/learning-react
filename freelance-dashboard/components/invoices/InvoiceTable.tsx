@@ -1,10 +1,8 @@
 "use client";
 import { getAllInvoices } from "@/lib/queries/invoices";
-import { useState } from "react";
 import Link from "next/link";
 import { Invoice } from "@/types";
-import { invoiceStatuses } from "@/lib/utils";
-import { MoveUpRight } from "lucide-react";
+import StatusBadge from "../ui/StatusBadge";
 
 interface InvoiceTableProps {
   allInvoices: ReturnType<typeof getAllInvoices>;
@@ -28,11 +26,15 @@ export default function InvoiceTable({
   function handleStatusUpdate(id: number, status: Invoice["status"]) {
     updateInvoiceAction(id, status);
   }
+
+  function insertStatusBadge(status: Invoice["status"]) {}
+
   if (filterStatus && filterStatus !== "All") {
     allInvoices = allInvoices.filter(
       (invoice) => invoice.invoices.status === filterStatus,
     );
   }
+
   if (filterClient) {
     allInvoices = allInvoices.filter(
       (invoice) => invoice.invoices.clientId === filterClient,
@@ -73,11 +75,7 @@ export default function InvoiceTable({
                     Due in {getDueDaysRemaining(invoice.invoices.dueDate!)} days
                   </td>
                   <td>
-                    <span
-                      className={`capitalize font-manrope text-sm px-4 py-1 font-semibold rounded-full ${statusBadge}`}
-                    >
-                      {invoice.invoices.status}
-                    </span>
+                    <StatusBadge status={invoice.invoices.status} />
                   </td>
                   <td className="text-link hover:text-linkHover">
                     <Link href={`/invoices/${invoice.invoices.id}`}>
@@ -122,11 +120,7 @@ export default function InvoiceTable({
                 <span className="text-textTertiary text-md font-manrope">
                   #{invoice.invoices.id}
                 </span>
-                <span
-                  className={`capitalize font-manrope text-sm px-4 py-1 font-semibold rounded-full ${statusBadge}`}
-                >
-                  {invoice.invoices.status}
-                </span>
+                <StatusBadge status={invoice.invoices.status} />
               </div>
               <div className="flex flex-row items-center justify-between">
                 <h3 className="font-manrope font-semibold tracking-tight text-xl">

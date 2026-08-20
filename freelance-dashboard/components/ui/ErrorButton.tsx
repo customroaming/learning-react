@@ -2,16 +2,18 @@ type ErrorButtonProps = {
   ctaText: string;
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   isDisabled?: boolean;
+  styles?: string;
 };
 export default function ErrorButton({
   ctaText,
   onClick,
   isDisabled,
+  styles,
 }: ErrorButtonProps) {
   return (
     <button
       onClick={onClick}
-      className="bg-error text-onError text-xl transition-all cursor-pointer leading-4 w-fit pb-3 hover:bg-error/75 hover:text-onError pt-2 px-6 rounded-full"
+      className={`border-error border text-error text-xl leading-normal transition-all cursor-pointer font-manrope capitalize w-fit  hover:bg-error/75 hover:text-onError py-2 px-8 ${styles} rounded-full`}
       disabled={isDisabled}
     >
       {ctaText}
