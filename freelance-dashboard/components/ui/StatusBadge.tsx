@@ -9,7 +9,7 @@ export default function StatusBadge({ status }: StatusBadgeProps) {
 
   return (
     <span
-      className={`capitalize font-manrope text-sm px-4 py-1 font-semibold rounded-full ${statusStyle[status]}`}
+      className={`capitalize h-fit font-manrope text-sm px-4 py-1 font-semibold rounded-full ${statusStyle[status]}`}
     >
       {status}
     </span>
