@@ -11,6 +11,8 @@ import {
 import { Cross, Plus, X } from "lucide-react";
 import { useState } from "react";
 import { getLatestInvoice } from "../actions";
+import TextInput from "@/components/ui/TextInput";
+import TextAreaInput from "@/components/ui/TextAreaInput";
 
 type InvoiceFormProps = {
   clients: Client[];
@@ -25,7 +27,6 @@ export default function InvoiceForm({
 }: InvoiceFormProps) {
   const [newName, setNewName] = useState<string>("");
   const [newEmail, setNewEmail] = useState<string>("");
-  const [newAmount, setNewAmount] = useState<number>(0);
   const [newAddress, setNewAddress] = useState<string>("");
   const [newBusinessName, setNewBusinessName] = useState<string | null>("");
   const [selectedClient, setSelectedClient] = useState<string>("new");
@@ -110,49 +111,58 @@ export default function InvoiceForm({
   }
 
   return (
-    <form className="invoiceForm shadow-md flex-col flex gap-4 p-8 rounded-lg bg-tertiaryContainer mt-8">
-      <select
-        value={selectedClient}
-        onChange={(e) => handleClientChange(e.target.value)}
-      >
-        <option value="new">New Client</option>
-        {clients.map(optionClients)}
-      </select>
-      <input
-        placeholder="name"
-        value={newName}
-        onChange={(e) => setNewName(e.target.value)}
-        disabled={isExistingClient}
+    <form className="invoiceForm font-manrope shadow-md flex-col flex gap-4 p-8 rounded-lg bg-tertiaryContainer mt-8">
+      <div className="flex flex-col gap-2">
+        <label className="font-semibold">Client</label>
+        <select
+          className="bg-surfaceContainer border border-outline rounded-lg"
+          value={selectedClient}
+          onChange={(e) => handleClientChange(e.target.value)}
+        >
+          <option value="new">New Client</option>
+          {clients.map(optionClients)}
+        </select>
+      </div>
+      <TextInput
+        placeholderProp="Client Name"
+        onChangeProp={(e) => setNewName(e.target.value)}
+        isDisabled={isExistingClient}
+        valueProp={newName}
+        label="Name"
       />
-      <input
-        placeholder="email"
-        value={newEmail}
-        onChange={(e) => setNewEmail(e.target.value)}
-        disabled={isExistingClient}
+      <TextInput
+        label="Email"
+        onChangeProp={(e) => setNewEmail(e.target.value)}
+        isDisabled={isExistingClient}
+        valueProp={newEmail}
+        placeholderProp="client@company.com"
       />
-      <input
-        placeholder="address"
-        value={newAddress}
-        onChange={(e) => setNewAddress(e.target.value)}
-        disabled={isExistingClient}
+      <TextInput
+        placeholderProp="Billing address"
+        valueProp={newAddress}
+        isDisabled={isExistingClient}
+        onChangeProp={(e) => setNewAddress(e.target.value)}
+        label="Address"
       />
-      <input
-        placeholder="businessName"
-        value={newBusinessName ? newBusinessName : ""}
-        onChange={(e) => setNewBusinessName(e.target.value)}
-        disabled={isExistingClient}
+      <TextAreaInput
+        placeholderProp="Company name"
+        valueProp={newBusinessName ? newBusinessName : ""}
+        isDisabled={isExistingClient}
+        onChangeProp={(e) => setNewBusinessName(e.target.value)}
+        label="Business Name"
       />
       <p className="text-lg">Invoice Items:</p>
       {lineItems.map((item, index) => {
         return (
           <div
             key={index}
-            className="flex flex-row justify-between items-center p-8 bg-background rounded-lg"
+            className="flex flex-row justify-between items-center p-8 bg-secondary rounded-2xl"
           >
-            <div className="flex flex-col gap-4">
-              <div className="flex flex-row gap-4 items-center">
-                <label className="text-lg w-30">Type:</label>
+            <div className="flex flex-col gap-4 w-full">
+              <div className="flex flex-col gap-2">
+                <label className="font-semibold">Type</label>
                 <select
+                  className="bg-surfaceContainer border border-outline rounded-lg"
                   value={lineItems[index].type}
                   onChange={(e) => {
                     updateLineItem(index, "type", e.target.value);
@@ -168,39 +178,32 @@ export default function InvoiceForm({
                 </select>
               </div>
 
-              <div className="flex flex-row gap-4 items-center">
-                <label className="text-lg w-30">Description:</label>
-                <input
-                  placeholder="Description"
-                  value={lineItems[index].description}
-                  onChange={(e) =>
-                    updateLineItem(index, "description", e.target.value)
-                  }
-                />
-              </div>
-              <div className="flex flex-row gap-4 items-center">
-                <label className="text-lg w-30">Unit Price:</label>
-                <input
-                  type="number"
-                  placeholder="Unit Price"
-                  value={lineItems[index].unitPrice}
-                  onChange={(e) =>
-                    updateLineItem(index, "unitPrice", e.target.value)
-                  }
-                />
-              </div>
+              <TextInput
+                placeholderProp="Description"
+                valueProp={lineItems[index].description}
+                onChangeProp={(e) =>
+                  updateLineItem(index, "description", e.target.value)
+                }
+                label="Description"
+              />
+              <TextInput
+                placeholderProp="Unit Price"
+                label="Unit Price"
+                valueProp={lineItems[index].unitPrice}
+                onChangeProp={(e) =>
+                  updateLineItem(index, "unitPrice", Number(e.target.value))
+                }
+              />
               {lineItems[index].type === "work" && (
-                <div className="flex flex-row gap-4 items-center">
-                  <label className="text-lg w-30">Quantity:</label>
-                  <input
-                    type="number"
-                    placeholder="Quantity"
-                    value={lineItems[index].quantity}
-                    onChange={(e) =>
-                      updateLineItem(index, "quantity", e.target.value)
-                    }
-                  />
-                </div>
+                <TextInput
+                  placeholderProp="Quantity"
+                  typeProp="number"
+                  label="Quantity"
+                  valueProp={lineItems[index].quantity}
+                  onChangeProp={(e) =>
+                    updateLineItem(index, "quantity", Number(e.target.value))
+                  }
+                />
               )}
             </div>
             <X
