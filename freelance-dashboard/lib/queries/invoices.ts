@@ -2,6 +2,7 @@ import { clients, invoiceItems, invoices, users } from "@/db/schema";
 import { db } from "@/lib/db";
 import { InvoiceItem } from "@/types";
 import { asc, desc, eq, sum } from "drizzle-orm";
+import { parse } from "path";
 export function getAllInvoices() {
   const allInvoices = db
     .select({
@@ -17,7 +18,13 @@ export function getAllInvoices() {
     .groupBy(invoices.id, clients.id, users.id)
     .orderBy(desc(invoices.dueDate))
     .all();
-  return allInvoices;
+  return allInvoices.map((invoice) => ({
+    ...invoice,
+    total:
+      invoice.total !== null
+        ? Math.round(parseFloat(invoice.total) * 100) / 100
+        : null,
+  }));
 }
 
 export function getInvoiceTotal(invoiceId: number): number {

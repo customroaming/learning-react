@@ -13,6 +13,7 @@ import { useState } from "react";
 import { getLatestInvoice } from "../actions";
 import TextInput from "@/components/ui/TextInput";
 import TextAreaInput from "@/components/ui/TextAreaInput";
+import SecondaryButtonOutline from "@/components/ui/SecondaryButtonOutline";
 
 type InvoiceFormProps = {
   clients: Client[];
@@ -33,19 +34,26 @@ export default function InvoiceForm({
   const isExistingClient = selectedClient !== "new";
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  const [lineItems, setLineItems] = useState<LineItem[]>([
+  type LineItemDraft = Omit<LineItem, "quantity" | "unitPrice"> & {
+    quantity: string;
+    unitPrice: string;
+  };
+  const [lineItems, setLineItems] = useState<LineItemDraft[]>([
     {
       type: "hosting",
       description: "Monthly Web Hosting",
-      quantity: 1,
-      unitPrice: 15,
+      quantity: "1",
+      unitPrice: "15",
     },
   ]);
 
-  const total = lineItems.reduce(
-    (sum, item) => sum + item.quantity * item.unitPrice,
-    0,
-  );
+  const total = lineItems
+    .reduce(
+      (sum, item) =>
+        sum + parseFloat(item.quantity) * parseFloat(item.unitPrice),
+      0,
+    )
+    .toFixed(2);
   //
   //replace with actual auth when implemented
   //
@@ -75,7 +83,13 @@ export default function InvoiceForm({
     setNewBusinessName(client.businessName);
 
     const previousItems = await getLatestInvoice(Number(clientId));
-    setLineItems(previousItems);
+    setLineItems(
+      previousItems.map((item) => ({
+        ...item,
+        quantity: String(item.quantity),
+        unitPrice: String(item.unitPrice),
+      })),
+    );
   }
 
   function optionClients(clients: Client) {
@@ -95,23 +109,19 @@ export default function InvoiceForm({
       {
         type: "hosting",
         description: "",
-        quantity: 1,
-        unitPrice: 0,
+        quantity: "1",
+        unitPrice: "0",
       },
     ]);
   }
-  function updateLineItem(
-    index: number,
-    field: keyof LineItem,
-    value: string | number,
-  ) {
+  function updateLineItem(index: number, field: keyof LineItem, value: string) {
     setLineItems((prev) =>
       prev.map((item, i) => (i === index ? { ...item, [field]: value } : item)),
     );
   }
 
   return (
-    <form className="invoiceForm font-manrope shadow-md flex-col flex gap-4 p-8 rounded-lg bg-tertiaryContainer mt-8">
+    <form className="invoiceForm font-manrope flex-col flex gap-4 p-4 rounded-lg bg-tertiaryContainer mt-4">
       <div className="flex flex-col gap-2">
         <label className="font-semibold">Client</label>
         <select
@@ -123,43 +133,56 @@ export default function InvoiceForm({
           {clients.map(optionClients)}
         </select>
       </div>
-      <TextInput
-        placeholderProp="Client Name"
-        onChangeProp={(e) => setNewName(e.target.value)}
-        isDisabled={isExistingClient}
-        valueProp={newName}
-        label="Name"
-      />
-      <TextInput
-        label="Email"
-        onChangeProp={(e) => setNewEmail(e.target.value)}
-        isDisabled={isExistingClient}
-        valueProp={newEmail}
-        placeholderProp="client@company.com"
-      />
-      <TextInput
-        placeholderProp="Billing address"
-        valueProp={newAddress}
-        isDisabled={isExistingClient}
-        onChangeProp={(e) => setNewAddress(e.target.value)}
-        label="Address"
-      />
-      <TextAreaInput
-        placeholderProp="Company name"
-        valueProp={newBusinessName ? newBusinessName : ""}
-        isDisabled={isExistingClient}
-        onChangeProp={(e) => setNewBusinessName(e.target.value)}
-        label="Business Name"
-      />
-      <p className="text-lg">Invoice Items:</p>
+      <div className="flex flex-col gap-4 md:flex-row">
+        <TextInput
+          placeholderProp="Client Name"
+          onChangeProp={(e) => setNewName(e.target.value)}
+          isDisabled={isExistingClient}
+          valueProp={newName}
+          label="Name"
+          styles="w-full"
+        />
+        <TextInput
+          label="Email"
+          onChangeProp={(e) => setNewEmail(e.target.value)}
+          isDisabled={isExistingClient}
+          valueProp={newEmail}
+          placeholderProp="client@company.com"
+          styles="w-full"
+        />
+      </div>
+      <div className="flex flex-col gap-4 md:flex-row">
+        <TextAreaInput
+          placeholderProp="Billing address"
+          valueProp={newAddress}
+          isDisabled={isExistingClient}
+          onChangeProp={(e) => setNewAddress(e.target.value)}
+          label="Address"
+          styles="w-full"
+        />
+        <TextInput
+          placeholderProp="Company name"
+          valueProp={newBusinessName ? newBusinessName : ""}
+          isDisabled={isExistingClient}
+          onChangeProp={(e) => setNewBusinessName(e.target.value)}
+          label="Business Name"
+          styles="w-full"
+        />
+      </div>
+      <p className="text-xl font-semibold">Invoice Items:</p>
       {lineItems.map((item, index) => {
         return (
           <div
             key={index}
-            className="flex flex-row justify-between items-center p-8 bg-secondary rounded-2xl"
+            className="flex flex-row justify-between items-center p-6 bg-secondary rounded-2xl"
           >
-            <div className="flex flex-col gap-4 w-full">
-              <div className="flex flex-col gap-2">
+            <div className="flex flex-col md:grid md:grid-cols-3 gap-4 w-full relative">
+              <X
+                className="cursor-pointer hover:scale-120 transition-all text-darkText/75 absolute top-0 right-0 w-5"
+                size={32}
+                onClick={() => removeLineItem(index)}
+              />
+              <div className="flex flex-col gap-2 w-full">
                 <label className="font-semibold">Type</label>
                 <select
                   className="bg-surfaceContainer border border-outline rounded-lg"
@@ -185,14 +208,16 @@ export default function InvoiceForm({
                   updateLineItem(index, "description", e.target.value)
                 }
                 label="Description"
+                styles="w-full"
               />
               <TextInput
                 placeholderProp="Unit Price"
                 label="Unit Price"
                 valueProp={lineItems[index].unitPrice}
                 onChangeProp={(e) =>
-                  updateLineItem(index, "unitPrice", Number(e.target.value))
+                  updateLineItem(index, "unitPrice", e.target.value)
                 }
+                styles="w-full"
               />
               {lineItems[index].type === "work" && (
                 <TextInput
@@ -201,31 +226,33 @@ export default function InvoiceForm({
                   label="Quantity"
                   valueProp={lineItems[index].quantity}
                   onChangeProp={(e) =>
-                    updateLineItem(index, "quantity", Number(e.target.value))
+                    updateLineItem(index, "quantity", e.target.value)
                   }
+                  styles="w-full"
                 />
               )}
             </div>
-            <X
-              className="cursor-pointer hover:scale-120 transition-all"
-              size={32}
-              onClick={() => removeLineItem(index)}
-            />
           </div>
         );
       })}
-      <Plus
-        size={32}
-        className="text-black rounded-full bg-background hover:scale-110 cursor-pointer"
-        onClick={() => {
+      <SecondaryButtonOutline
+        ctaText="+ Add Item"
+        onClick={(e) => {
+          e.preventDefault();
           addLineItem();
         }}
       />
-      <div className="flex flex-row justify-between items-center p-8 bg-background rounded-lg">
-        <span className="text-xl font-bold">Total: {total}</span>
+      <div className="capitalize items-center w-full px-4 py-4 flex flex-row rounded-lg border-outline border bg-surfaceContainer justify-between font-semibold">
+        <p className="text-xl">Total:</p>
+        <p className="text-3xl font-serif">£{total}</p>
+      </div>
+      <div className="text-textSecondary flex flex-row gap-2">
+        <p>Created on: {currentDate.toDateString()}</p>
+        <p> / </p>
+        <p>Due on: {expiry.toDateString()}</p>
       </div>
       <PrimaryButton
-        ctaText="create invoice"
+        ctaText="Create Invoice"
         onClick={async (e) => {
           e.preventDefault();
           setIsSubmitting(true);
@@ -256,15 +283,18 @@ export default function InvoiceForm({
               userId: userId,
             };
 
-            createMethodAction(newInvoice, lineItems);
+            const finalItems: LineItem[] = lineItems.map((item) => ({
+              ...item,
+              quantity: parseFloat(item.quantity) || 0,
+              unitPrice: parseFloat(item.unitPrice) || 0,
+            }));
+            createMethodAction(newInvoice, finalItems);
           } finally {
             setIsSubmitting(false);
           }
         }}
         isDisabled={isSubmitting}
       />
-      <p>Created on: {currentDate.toDateString()}</p>
-      <p>Due on: {expiry.toDateString()}</p>
     </form>
   );
 }

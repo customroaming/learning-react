@@ -4,6 +4,7 @@ type TextAreaInputProps = {
   onChangeProp: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   isDisabled: boolean;
   label: string;
+  styles?: string;
 };
 export default function TextAreaInput({
   placeholderProp,
@@ -11,9 +12,10 @@ export default function TextAreaInput({
   valueProp,
   isDisabled,
   label,
+  styles,
 }: TextAreaInputProps) {
   return (
-    <div className="flex flex-col gap-2">
+    <div className={`flex flex-col gap-2 ${styles}`}>
       <label className="font-semibold">{label}</label>
       <textarea
         placeholder={placeholderProp}

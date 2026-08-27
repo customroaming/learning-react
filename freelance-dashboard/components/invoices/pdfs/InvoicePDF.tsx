@@ -182,7 +182,7 @@ export default function InvoicePDF({
                 <View style={[styles.column, styles.gapSm]}>
                   <Text>{item.description}</Text>
                 </View>
-                <Text style={styles.bold}>£{item.amount}</Text>
+                <Text style={styles.bold}>£{item.amount.toFixed(2)}</Text>
               </View>
             ))}
           </View>
@@ -195,7 +195,10 @@ export default function InvoicePDF({
           <View>
             <View style={[styles.column, styles.gapMd]}>
               <Text style={[styles.bold, styles.textRight]}>
-                £{invoiceItems.reduce((sum, item) => sum + item.amount, 0)}
+                £
+                {invoiceItems
+                  .reduce((sum, item) => sum + item.amount, 0)
+                  .toFixed(2)}
               </Text>
             </View>
           </View>

@@ -5,6 +5,7 @@ type TextInputProps = {
   isDisabled?: boolean;
   label: string;
   typeProp?: string;
+  styles?: string;
 };
 export default function TextInput({
   placeholderProp,
@@ -13,9 +14,10 @@ export default function TextInput({
   isDisabled,
   label,
   typeProp,
+  styles,
 }: TextInputProps) {
   return (
-    <div className="flex flex-col gap-2">
+    <div className={`flex flex-col gap-2 ${styles}`}>
       <label className="font-semibold">{label}</label>
       <input
         type={typeProp ? typeProp : "text"}
@@ -23,7 +25,9 @@ export default function TextInput({
         value={valueProp}
         onChange={onChangeProp}
         disabled={isDisabled}
-        className="bg-surfaceContainer rounded-lg transition-all border border-outline focus:border-outlineFocus outline-none"
+        step="0.01"
+        inputMode="decimal"
+        className={`bg-surfaceContainer rounded-lg transition-all border border-outline focus:border-outlineFocus outline-none `}
       />
     </div>
   );
