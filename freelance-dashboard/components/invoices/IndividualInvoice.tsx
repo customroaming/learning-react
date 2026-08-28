@@ -140,7 +140,7 @@ export default function IndividualInvoice({
                 >
                   <div className="flex flex-row text-lg font-semibold justify-between">
                     <p>{item.description}</p>
-                    <p>£{item.amount}</p>
+                    <p>£{item.amount.toFixed(2)}</p>
                   </div>
                   <hr className="text-textTertiary" />
                   <div className="flex text-textSecondary flex-row justify-between">

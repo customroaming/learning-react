@@ -6,7 +6,6 @@ import InvoiceTable from "./InvoiceTable";
 import { deleteInvoice, updateInvoiceStatus } from "@/app/invoices/actions";
 import { useState } from "react";
 import SecondaryButtonOutline from "../ui/SecondaryButtonOutline";
-import { boolean } from "drizzle-orm/gel-core";
 import { Invoice } from "@/types";
 
 type InvoicePageComponentProps = {
