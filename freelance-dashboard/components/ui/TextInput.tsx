@@ -25,8 +25,7 @@ export default function TextInput({
         value={valueProp}
         onChange={onChangeProp}
         disabled={isDisabled}
-        step="0.01"
-        inputMode="decimal"
+        inputMode={typeProp ? "decimal" : "text"}
         className={`bg-surfaceContainer rounded-lg transition-all border border-outline focus:border-outlineFocus outline-none `}
       />
     </div>

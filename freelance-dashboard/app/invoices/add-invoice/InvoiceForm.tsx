@@ -214,6 +214,7 @@ export default function InvoiceForm({
                 placeholderProp="Unit Price"
                 label="Unit Price"
                 valueProp={lineItems[index].unitPrice}
+                typeProp="number"
                 onChangeProp={(e) =>
                   updateLineItem(index, "unitPrice", e.target.value)
                 }
