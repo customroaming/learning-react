@@ -1,7 +1,8 @@
 type TextInputProps = {
   placeholderProp: string;
   valueProp: string | number;
-  onChangeProp: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChangeProp?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   isDisabled?: boolean;
   label: string;
   typeProp?: string;
@@ -15,6 +16,7 @@ export default function TextInput({
   label,
   typeProp,
   styles,
+  onBlur,
 }: TextInputProps) {
   return (
     <div className={`flex flex-col gap-2 ${styles}`}>
@@ -25,6 +27,7 @@ export default function TextInput({
         value={valueProp}
         onChange={onChangeProp}
         disabled={isDisabled}
+        onBlur={onBlur}
         inputMode={typeProp ? "decimal" : "text"}
         className={`bg-surfaceContainer rounded-lg transition-all border border-outline focus:border-outlineFocus outline-none `}
       />

@@ -2,8 +2,8 @@
 import { Transaction } from "@/types";
 import { useState } from "react";
 import SecondaryButtonOutline from "../ui/SecondaryButtonOutline";
-import { BanknoteArrowDown, BanknoteArrowUp } from "lucide-react";
 import { updateNotes } from "@/app/expenses/actions";
+import TextInput from "../ui/TextInput";
 
 type ExpensesListProps = {
   allTransactions: Transaction[];
@@ -30,7 +30,10 @@ export default function ExpensesList({ allTransactions }: ExpensesListProps) {
     (expensesToShow.reduce((sum, item) => sum + item.amount, 0) / 100) * -1;
 
   return (
-    <div className="flex flex-col gap-4 md:grid md:grid-cols-2">
+    <div className="flex flex-col items-center gap-4 md:grid md:grid-cols-2">
+      <div className="font-manrope text-2xl col-span-2">
+        Total expenses for {selectedCategory} is £{expenseTotalSum}
+      </div>
       <div className="flex flex-row gap-2 md:col-span-2">
         <SecondaryButtonOutline
           ctaText="All"
@@ -45,15 +48,12 @@ export default function ExpensesList({ allTransactions }: ExpensesListProps) {
             onClick={() => setSelectedCategory(c ?? "All")}
           />
         ))}
+        <SecondaryButtonOutline
+          ctaText="Expenses for last tax year"
+          onClick={() => setLastTaxYear((prev) => !prev)}
+          active={lastTaxYear === true}
+        />
       </div>
-      <div className="text-2xl">
-        Total expenses for {selectedCategory} is £{expenseTotalSum}
-      </div>
-      <SecondaryButtonOutline
-        ctaText="Expenses for last tax year"
-        onClick={() => setLastTaxYear((prev) => !prev)}
-        active={lastTaxYear === true}
-      />
       {expensesToShow.map((transaction) => {
         const amount = transaction.amount / 100;
         const formattedDate = new Intl.DateTimeFormat("en-GB", {
@@ -66,37 +66,38 @@ export default function ExpensesList({ allTransactions }: ExpensesListProps) {
         return (
           <div
             key={transaction.id}
-            className="flex flex-col gap-4 p-4 rounded-lg border border-outline bg-secondary flex-wrap w-full"
+            className="flex flex-col gap-2 p-4 rounded-2xl border border-outline bg-surfaceContainer flex-wrap w-full font-manrope tracking-tight"
           >
             <div className="flex flex-row gap-4 justify-between">
-              <div className="flex flex-row gap-2 items-center">
-                {transaction.amount > 0 ? (
-                  <BanknoteArrowUp />
-                ) : (
-                  <BanknoteArrowDown />
-                )}
-                <span className="text-2xl">{amount}</span>
+              <div
+                className={`flex flex-row gap-0 items-center text-2xl ${transaction.amount > 0 ? "text-onPaid" : "text-darkText"}`}
+              >
+                {transaction.amount > 0 ? "+" : "-"}
+                <span className={`text-2xl font-semibold `}>
+                  £{Math.abs(amount).toFixed(2)}
+                </span>
               </div>
               <div className="flex flex-row gap-1 items-center">
                 <div className="flex flex-row gap-2"></div>
                 <p>{transaction.merchantEmoji ?? "💼"}</p>
-                <p className="text-lg">
+                <p className="text-lg text-textSecondary">
                   {transaction.merchantName ?? "No Merchant"}
                 </p>
               </div>
             </div>
             <p className="font-manrope">{transaction.description}</p>
-            <input
-              className="font-manrope"
-              defaultValue={
-                transaction.notes === "" ? "No Note" : transaction.notes
-              }
-              onBlur={(e) => updateNotes(e.target.value, transaction.id)}
-            />
-            <div className="flex opacity-75 flex-row font-manrope italic gap-2">
+            <div className="flex flex-col gap-1">
+              <label className="font-semibold text-md">Note:</label>
+              <input
+                className="bg-surfaceContainer rounded-lg transition-all border border-outline focus:border-outlineFocus outline-none py-3 px-6 text-lg"
+                defaultValue={
+                  transaction.notes === "" ? "No Note" : transaction.notes
+                }
+                onBlur={(e) => updateNotes(e.target.value, transaction.id)}
+              />
+            </div>
+            <div className="flex opacity-75 flex-row font-manrope  gap-2">
               <span>{formattedDate}</span>
-              <span>•</span>
-              <p>{transaction.merchantName ?? "No Merchant"}</p>
             </div>
           </div>
         );

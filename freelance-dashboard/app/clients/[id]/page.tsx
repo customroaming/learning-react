@@ -1,4 +1,4 @@
-import IndividualClient from "@/components/clients/IndividualInvoice";
+import IndividualClient from "@/components/clients/IndividualClient";
 import { deleteClient, updateClient } from "../actions";
 import InvoiceTable from "@/components/invoices/InvoiceTable";
 import { getAllInvoices } from "@/lib/queries/invoices";
@@ -22,13 +22,16 @@ export default async function IndividualClientPage({
         updateClientAction={updateClient}
         deleteClientAction={deleteClient}
       />
-      <h2 className="text-4xl">All Invoices</h2>
-      <InvoiceTable
-        allInvoices={allInvoices}
-        updateInvoiceAction={updateInvoiceStatus}
-        deleteInvoiceMethod={deleteInvoice}
-        filterClient={Number(id)}
-      />
+      <hr className="text-outline" />
+      <div className="flex flex-col gap-4">
+        <h2 className="font-manrope text-3xl">All Invoices</h2>
+        <InvoiceTable
+          allInvoices={allInvoices}
+          updateInvoiceAction={updateInvoiceStatus}
+          deleteInvoiceMethod={deleteInvoice}
+          filterClient={Number(id)}
+        />
+      </div>
     </div>
   );
 }

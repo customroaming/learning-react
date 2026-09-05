@@ -2,7 +2,7 @@ type TextAreaInputProps = {
   placeholderProp: string;
   valueProp: string;
   onChangeProp: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  isDisabled: boolean;
+  isDisabled?: boolean;
   label: string;
   styles?: string;
 };
