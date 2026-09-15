@@ -275,6 +275,8 @@ export default function InvoiceForm({
               });
             }
 
+            const dateStr = `${currentDate.getDate()}${currentDate.getMonth() + 1}${currentDate.getFullYear()}`;
+            const dateId = `${clientId}-${dateStr}`;
             // Build the invoice NOW that we have the real clientId
             const newInvoice: NewInvoice = {
               clientId, // correct ID whether new or existing
@@ -282,6 +284,7 @@ export default function InvoiceForm({
               dueDate: expiry,
               status: "sent",
               userId: userId,
+              dateId: dateId,
             };
 
             const finalItems: LineItem[] = lineItems.map((item) => ({

@@ -90,6 +90,13 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: "bold",
   },
+  italic: {
+    fontStyle: "italic",
+  },
+  reference: {
+    fontSize: 12,
+    fontWeight: "bold",
+  },
   row: {
     flexDirection: "row",
   },
@@ -133,7 +140,7 @@ export default function InvoicePDF({
     <Document>
       <Page style={styles.page}>
         <View style={[styles.column, styles.gapSm]}>
-          <Text style={styles.heading}>INVOICE #{invoice.id}</Text>
+          <Text style={styles.heading}>INVOICE #{invoice.dateId}</Text>
           <Text style={styles.solira}>Solira</Text>
         </View>
         <View style={[styles.row, styles.justifyBetween]}>
@@ -212,6 +219,7 @@ export default function InvoicePDF({
             <Text>Account holder: William Harper</Text>
             <Text>Sort code: 04-00-05</Text>
             <Text>Account number: 32978966</Text>
+            <Text>Reference: {invoice.dateId}</Text>
           </View>
         </View>
       </Page>

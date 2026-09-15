@@ -25,6 +25,7 @@ export const clients = sqliteTable("clients", {
 
 export const invoices = sqliteTable("invoices", {
   id: integer("id").primaryKey({ autoIncrement: true }),
+  dateId: text("date_id").unique(),
   userId: integer("user_id")
     .references(() => users.id)
     .notNull(),

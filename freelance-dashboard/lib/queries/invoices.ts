@@ -1,8 +1,7 @@
 import { clients, invoiceItems, invoices, users } from "@/db/schema";
 import { db } from "@/lib/db";
-import { InvoiceItem } from "@/types";
+import { Invoice, InvoiceItem } from "@/types";
 import { asc, desc, eq, sum } from "drizzle-orm";
-import { parse } from "path";
 export function getAllInvoices() {
   const allInvoices = db
     .select({
@@ -52,4 +51,7 @@ export function getInvoice(invoiceId: number) {
     .where(eq(invoices.id, invoiceId))
     .get();
   return invoice;
+}
+export function markInvoicePaid(invoiceId: number, status: Invoice["status"]) {
+  db.update(invoices).set({ status }).where(eq(invoices.id, invoiceId)).run();
 }

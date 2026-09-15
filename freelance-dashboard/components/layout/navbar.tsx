@@ -36,6 +36,7 @@ export default function Navbar() {
         {menuLink("/invoices", "invoices")}
         {menuLink("/clients", "clients")}
         {menuLink("/expenses", "expenses")}
+        {menuLink("/ingoings", "ingoings")}
       </span>
       <div className="hidden md:hidden">
         <button onClick={() => setIsOpen(!isOpen)}>

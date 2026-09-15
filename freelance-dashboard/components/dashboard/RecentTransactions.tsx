@@ -1,7 +1,9 @@
-import { MonzoTransaction } from "@/types";
+"use client";
+import { updateNotes } from "@/app/expenses/actions";
+import { MonzoTransaction, Transaction } from "@/types";
 
 type RecentTransactionsProps = {
-  transactions: MonzoTransaction[];
+  transactions: Transaction[];
 };
 
 export default function RecentTransactions({
@@ -13,15 +15,17 @@ export default function RecentTransactions({
         Recent Transactions
       </h2>
       <div className="flex flex-row flex-wrap gap-4 md:grid-cols-2 md:grid">
-        {transactions.reverse().map((transaction) => {
+        {[...transactions].map((transaction) => {
           const amount = transaction.amount / 100;
+          const isDebit = transaction.amount > 0;
           const formattedDate = new Intl.DateTimeFormat("en-GB", {
             day: "numeric",
             month: "short",
             year: "numeric",
             hour: "numeric",
             minute: "numeric",
-          }).format(new Date(transaction.created));
+            timeZone: "Europe/London",
+          }).format(new Date(transaction.date));
           return (
             <div
               key={transaction.id}
@@ -31,7 +35,7 @@ export default function RecentTransactions({
                 <div
                   className={`flex flex-row gap-0 items-center text-2xl ${transaction.amount > 0 ? "text-onPaid" : "text-darkText"}`}
                 >
-                  {transaction.amount > 0 ? "+" : "-"}
+                  {isDebit ? "+" : "-"}
                   <span className={`text-2xl font-semibold `}>
                     £{Math.abs(amount).toFixed(2)}
                   </span>

@@ -1,5 +1,6 @@
 "use client";
 import {
+  CircleCheck,
   FileText,
   House,
   LucideIcon,
@@ -32,6 +33,7 @@ export default function BottomBar() {
       {displayIcon("invoices", "/invoices", FileText)}
       {displayIcon("clients", "/clients", UsersRound)}
       {displayIcon("expenses", "/expenses", PoundSterling)}
+      {displayIcon("ingoings", "/ingoings", CircleCheck)}
     </nav>
   );
 }

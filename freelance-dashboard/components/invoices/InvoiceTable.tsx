@@ -3,6 +3,7 @@ import { getAllInvoices } from "@/lib/queries/invoices";
 import Link from "next/link";
 import { Invoice } from "@/types";
 import StatusBadge from "../ui/StatusBadge";
+import { hasPaid } from "@/lib/queries/matching";
 
 interface InvoiceTableProps {
   allInvoices: ReturnType<typeof getAllInvoices>;

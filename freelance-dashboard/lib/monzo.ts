@@ -2,7 +2,6 @@ import { MonzoTransaction } from "@/types";
 import { db } from "./db";
 import { tokens, transactions } from "@/db/schema";
 import { updateTokens } from "./mutations/monzo";
-import { getDigestForWellKnownError } from "next/dist/server/app-render/create-error-handler";
 
 const accountId = process.env.MONZO_ACCOUNT_ID;
 

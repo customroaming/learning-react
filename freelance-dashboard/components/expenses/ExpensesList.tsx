@@ -7,10 +7,14 @@ import TextInput from "../ui/TextInput";
 
 type ExpensesListProps = {
   allTransactions: Transaction[];
+  isExpense: boolean;
 };
-export default function ExpensesList({ allTransactions }: ExpensesListProps) {
-  const expenses = allTransactions.filter(
-    (transaction) => transaction.amount < 0,
+export default function ExpensesList({
+  allTransactions,
+  isExpense,
+}: ExpensesListProps) {
+  const expenses = allTransactions.filter((transaction) =>
+    isExpense ? transaction.amount < 0 : transaction.amount > 0,
   );
   const categories = [...new Set(expenses.map((e) => e.notes))];
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -22,19 +26,23 @@ export default function ExpensesList({ allTransactions }: ExpensesListProps) {
 
   const expensesToShow = lastTaxYear
     ? filteredExpenses.filter(
-        (expense) => expense.date > new Date("2026-07-15"),
+        (expense) => expense.date > new Date("2026-04-05"),
       )
     : filteredExpenses;
 
   const expenseTotalSum =
-    (expensesToShow.reduce((sum, item) => sum + item.amount, 0) / 100) * -1;
+    (expensesToShow.reduce((sum, item) => sum + item.amount, 0) / 100) *
+    (isExpense ? -1 : 1);
 
   return (
-    <div className="flex flex-col items-center gap-4 md:grid md:grid-cols-2">
+    <div className="flex flex-col  gap-4 md:grid md:grid-cols-2">
       <div className="font-manrope text-2xl col-span-2">
-        Total expenses for {selectedCategory} is £{expenseTotalSum}
+        Total {isExpense ? "expenses" : "ingoings"} for {selectedCategory} is £
+        {expenseTotalSum}
       </div>
-      <div className="flex flex-row gap-2 md:col-span-2">
+      <div
+        className={`${!isExpense ? "hidden" : "flex"} flex-row gap-2 flex-wrap md:col-span-2`}
+      >
         <SecondaryButtonOutline
           ctaText="All"
           active={selectedCategory === "All"}
@@ -62,6 +70,7 @@ export default function ExpensesList({ allTransactions }: ExpensesListProps) {
           year: "numeric",
           hour: "numeric",
           minute: "numeric",
+          timeZone: "Europe/London",
         }).format(transaction.date || new Date());
         return (
           <div
