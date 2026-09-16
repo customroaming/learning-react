@@ -42,9 +42,9 @@ export default function RecentTransactions({
                 </div>
                 <div className="flex flex-row gap-1 items-center">
                   <div className="flex flex-row gap-2"></div>
-                  <p>{transaction.merchant?.emoji ?? "💼"}</p>
+                  <p>{transaction.merchantEmoji ?? "💼"}</p>
                   <p className="text-lg text-textSecondary">
-                    {transaction.merchant?.name ?? "No Merchant"}
+                    {transaction.merchantName ?? "Client"}
                   </p>
                 </div>
               </div>

@@ -94,10 +94,11 @@ export async function syncTransactions() {
         notes: transaction.notes === "" ? "Business" : transaction.notes,
         merchantName: transaction.merchant?.name
           ? transaction.merchant?.name
-          : "No Merchant",
-        merchantEmoji: transaction.merchant?.emoji
-          ? transaction.merchant.emoji
-          : "💕",
+          : "Client",
+        merchantEmoji:
+          transaction.merchant?.emoji && transaction.merchant?.name
+            ? transaction.merchant.emoji
+            : "💕",
       })),
     )
     .onConflictDoNothing();

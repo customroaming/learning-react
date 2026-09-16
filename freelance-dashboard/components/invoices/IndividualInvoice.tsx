@@ -61,10 +61,10 @@ export default function IndividualInvoice({
             </Link>
             <div className=" flex flex-row items-center gap-4 justify-between md:justify-start">
               <p className=" text-textSecondary md:hidden font-semibold align-end leading-normal">
-                To: {invoice.clients?.businessName}
+                To: {invoice.clients?.businessName} (#{invoice.invoices.dateId})
               </p>
               <span className="text-4xl hidden md:block font-bold">
-                Invoice #{invoice.invoices.id}
+                Invoice #{invoice.invoices.dateId}
               </span>
               <StatusBadge status={invoice.invoices.status} />
             </div>

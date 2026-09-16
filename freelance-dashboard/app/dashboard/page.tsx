@@ -8,6 +8,7 @@ import { getDbTransactions } from "../expenses/actions";
 export default async function App() {
   const amount = formatCurrency(23.2);
   const date = formatDate(new Date());
+  await syncTransactions();
   const getAllTransactions = await getDbTransactions();
   const currentBalance = await getBalance();
   return (

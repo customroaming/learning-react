@@ -68,10 +68,28 @@ export async function getLatestInvoice(clientId: number): Promise<LineItem[]> {
 export async function sendInvoice(invoiceId: number) {
   const data = getInvoiceData(invoiceId);
   const pdf = await generateInvoicePDF(data);
+  const month = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+    "",
+  ];
+  const getMonth = data.theInvoice.createdAt?.getMonth();
+  const getMonthName = month[getMonth ?? 12];
+  const getYear = data.theInvoice.createdAt?.getFullYear();
   await resend.emails.send({
     from: "will.harper@solira.uk",
     to: data.theClient.email,
-    subject: `Invoice #${data.theInvoice.id}`,
+    subject: `Website Invoice for ${data.theClient.businessName} • #${data.theInvoice.dateId} • ${getMonthName}-${getYear}`,
     react: InvoiceEmail({
       invoice: data.theInvoice,
       client: data.theClient,
@@ -79,7 +97,7 @@ export async function sendInvoice(invoiceId: number) {
     }),
     attachments: [
       {
-        filename: `invoice-${data.theInvoice.id}.pdf`,
+        filename: `${data.theClient.businessName}-#${data.theInvoice.dateId}.pdf`,
         content: pdf,
       },
     ],
